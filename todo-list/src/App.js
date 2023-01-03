@@ -3,10 +3,13 @@ import "./App.css";
 
 /* Components */
 
-function Todo({ todo }) {
+function Todo({ todo, setTodo, onDeleteTodoHandler }) {
   return (
     <div className="todo-container">
       <p>{todo.content}</p>
+      <div>
+        <button onClick={() => onDeleteTodoHandler(todo.id)}>삭제</button>
+      </div>
     </div>
   );
 }
@@ -36,6 +39,12 @@ function App() {
     init();
   };
 
+  const onDeleteTodoHandler = (id) => {
+    let newTodos = todos.filter((todo) => todo.id !== id);
+    console.log("!@#!@#", id);
+    setTodos(newTodos);
+  };
+
   /* Helper */
 
   function init() {
@@ -57,7 +66,11 @@ function App() {
       <h1>Todo List</h1>
       <div className="list-container">
         {todos.map((todo) => (
-          <Todo todo={todo} />
+          <Todo
+            key={todo.id}
+            todo={todo}
+            onDeleteTodoHandler={onDeleteTodoHandler}
+          />
         ))}
       </div>
     </div>
