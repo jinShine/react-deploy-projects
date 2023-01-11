@@ -5,6 +5,9 @@ import Button from "../../ui/Button";
 const PostListItem = (props) => {
   const { post, onClickItem, onClickDelete } = props;
 
+  const onClickItemHandler = () => {
+    onClickItem(post);
+  };
   const onClickDeleteHandler = (event) => {
     event.stopPropagation();
     onClickDelete(post);
@@ -12,7 +15,7 @@ const PostListItem = (props) => {
 
   return (
     <>
-      <SWrapper onClick={onClickItem}>
+      <SWrapper onClick={onClickItemHandler}>
         <STitle>{post.title}</STitle>
         <Button onClick={onClickDeleteHandler}>삭제</Button>
       </SWrapper>

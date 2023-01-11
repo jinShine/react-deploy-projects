@@ -21,6 +21,7 @@ const MainPage = (props) => {
 
   const onClickPostItemHandler = (post) => {
     const { id } = post;
+    console.log("DKDKDKDKKDKD", id);
     navigate(`/post/${id}`);
   };
 
