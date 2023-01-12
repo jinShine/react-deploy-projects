@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { RouterPath } from "../../shared/Router";
-import { __postPost } from "../../redux/modules/postsSlice";
+import { __getPost, __postPost } from "../../redux/modules/postsSlice";
 
 import styled from "styled-components";
 import CommentList from "../list/comment/CommentList";
@@ -10,13 +10,35 @@ import Header from "../ui/Header";
 import Button from "../ui/Button";
 import Textarea from "../ui/Textarea";
 import Wrapper from "../ui/Wrapper";
+import {
+  __deleteComment,
+  __getCommentsByTodoId,
+  __postComment,
+  __updateComment,
+} from "../../redux/modules/commentsSlice";
 
 const PostViewPage = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { postID } = useParams();
-  const { isLoading, posts, error } = useSelector((state) => state.posts);
-  const post = posts.find((post) => post.id === parseInt(postID));
+  const { isLoading, posts, error, post } = useSelector((state) => state.posts);
+  const { comments } = useSelector((state) => state.comments);
+
+  const [comment, setComment] = useState("");
+
+  const onClickCommentDeleteHandler = (commentID) => {
+    console.log("댓글 삭제");
+    dispatch(__deleteComment(commentID));
+  };
+  const onClickCommentModifyHandler = (comment) => {
+    console.log("댓글 수정");
+    dispatch(__updateComment({ ...comment, postId: postID }));
+  };
+
+  useEffect(() => {
+    dispatch(__getPost(postID));
+    dispatch(__getCommentsByTodoId(postID));
+  }, []);
 
   return (
     <Wrapper>
@@ -35,19 +57,29 @@ const PostViewPage = (props) => {
           </SPostContainer>
 
           <SCommentLabel>댓글</SCommentLabel>
-          <CommentList comments={post.comments} />
+          <CommentList
+            comments={comments}
+            onClickDelete={onClickCommentDeleteHandler}
+            onClickModify={onClickCommentModifyHandler}
+          />
 
           <Textarea
             height={40}
-            // value={comment}
+            value={comment}
+            placeholder={"댓글을 추가해주세요. (100자 이내)"}
             onChange={(event) => {
-              // setComment(event.target.value);
+              setComment(event.target.value);
             }}
+            maxLength={100}
           />
           <Button
             title="댓글 작성하기"
             onClick={() => {
-              navigate("/");
+              if (comment) {
+                const payload = { postId: post.id, comment };
+                dispatch(__postComment(payload));
+                setComment("");
+              }
             }}
           />
         </SContainer>

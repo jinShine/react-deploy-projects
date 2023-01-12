@@ -21,7 +21,6 @@ const MainPage = (props) => {
 
   const onClickPostItemHandler = (post) => {
     const { id } = post;
-    console.log("DKDKDKDKKDKD", id);
     navigate(`/post/${id}`);
   };
 
@@ -29,9 +28,17 @@ const MainPage = (props) => {
     dispatch(__deletePost(post.id));
   };
 
+  const onClickModifyHandler = (post) => {
+    navigate("/post-write", { state: { post } });
+  };
+
   useEffect(() => {
     dispatch(__getPosts());
   }, [dispatch]);
+
+  if (isLoading) return <div>할일이 없네요!</div>;
+
+  if (error) return <div>알수 없는 에러가 발생했습니다.</div>;
 
   return (
     <Wrapper>
@@ -43,9 +50,9 @@ const MainPage = (props) => {
             posts={posts}
             onClickItem={onClickPostItemHandler}
             onClickDelete={onClickDeleteHandler}
+            onClickModify={onClickModifyHandler}
           />
         </SContainer>
-        <div>{posts.title}</div>
       </SWrapper>
     </Wrapper>
   );

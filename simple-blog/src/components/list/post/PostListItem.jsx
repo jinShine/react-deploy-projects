@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Button from "../../ui/Button";
 
 const PostListItem = (props) => {
-  const { post, onClickItem, onClickDelete } = props;
+  const { post, onClickItem, onClickDelete, onClickModify } = props;
 
   const onClickItemHandler = () => {
     onClickItem(post);
@@ -12,12 +12,17 @@ const PostListItem = (props) => {
     event.stopPropagation();
     onClickDelete(post);
   };
+  const onClickModifyHandler = (event) => {
+    event.stopPropagation();
+    onClickModify(post);
+  };
 
   return (
     <>
       <SWrapper onClick={onClickItemHandler}>
         <STitle>{post.title}</STitle>
-        <Button onClick={onClickDeleteHandler}>삭제</Button>
+        <Button title="삭제" onClick={onClickDeleteHandler}></Button>
+        <Button title="수정" onClick={onClickModifyHandler}></Button>
       </SWrapper>
     </>
   );

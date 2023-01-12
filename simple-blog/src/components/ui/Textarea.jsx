@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Error from "./Error";
 
-const Textarea = (props) => {
-  const { height, placeholder, value, onChange, errorMessage } = props;
+const Textarea = ({ height, placeholder, value, onChange, errorMessage }) => {
   const [error, setError] = useState("");
 
   const onChangeHandler = (event) => {

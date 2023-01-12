@@ -1,9 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Header = (props) => {
-  const { title } = props;
-
+const Header = ({ title }) => {
   return (
     <SWrapper>
       <STitle>{title}</STitle>

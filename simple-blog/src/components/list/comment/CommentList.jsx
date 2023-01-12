@@ -2,14 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import CommentListItem from "./CommentListItem";
 
-const CommentList = (props) => {
-  const { comments } = props;
-
+const CommentList = ({ comments, onClickDelete, onClickModify }) => {
   return (
     <SWrapper>
       {comments &&
         comments.map((comment) => (
-          <CommentListItem key={comment.id} comment={comment} />
+          <CommentListItem
+            key={comment.id}
+            comment={comment}
+            onClickDelete={onClickDelete}
+            onClickModify={onClickModify}
+          />
         ))}
     </SWrapper>
   );

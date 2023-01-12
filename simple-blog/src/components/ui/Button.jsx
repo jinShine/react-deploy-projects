@@ -1,10 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-const Button = (props) => {
-  const { title, onClick } = props;
-
-  return <SButton onClick={onClick}>{title || "버튼"}</SButton>;
+const Button = ({ title = "버튼", onClick }) => {
+  return <SButton onClick={onClick}>{title}</SButton>;
 };
 
 export default Button;

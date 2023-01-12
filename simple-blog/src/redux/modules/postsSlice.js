@@ -1,16 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-
-/* Action Type */
-const actionType = {
-  posts: {
-    GET_POSTS: "GET_POSTS",
-    POST_POST: "POST_POST",
-    GET_POST: "GET_POST",
-    DELETE_POST: "DELETE_POST",
-  },
-  comment: {},
-};
+import { actionType } from "./actionType";
 
 /* Init value */
 const initialState = {
@@ -73,6 +63,29 @@ export const __deletePost = createAsyncThunk(
       );
       console.log(result);
       return thunkAPI.fulfillWithValue(postID);
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const __updatePost = createAsyncThunk(
+  actionType.posts.PUT_POST,
+  async (post, thunkAPI) => {
+    console.log(">>>>>>>>>>>>>>>>>>>", post);
+    try {
+      const result = await axios.patch(
+        `http://localhost:3001/posts/${post.id}`,
+        post
+      );
+      console.log(result);
+
+      if (result.status === 200) {
+        thunkAPI.dispatch(__getPosts());
+      }
+
+      return thunkAPI.fulfillWithValue(result.data);
     } catch (error) {
       console.log(error);
       return thunkAPI.rejectWithValue(error);
@@ -151,6 +164,18 @@ const postsSlice = createSlice({
       );
     },
     [__deletePost.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    // POST 수정
+    [__updatePost.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__updatePost.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.post = action.payload;
+    },
+    [__updatePost.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },

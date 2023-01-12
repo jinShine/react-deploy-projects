@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PostListItem from "./PostListItem";
 
 const PostList = (props) => {
-  const { posts, onClickItem, onClickDelete } = props;
+  const { posts, onClickItem, onClickDelete, onClickModify } = props;
 
   return (
     <SWrapper>
@@ -15,6 +15,7 @@ const PostList = (props) => {
               post={post}
               onClickItem={onClickItem}
               onClickDelete={onClickDelete}
+              onClickModify={onClickModify}
             />
           );
         })}

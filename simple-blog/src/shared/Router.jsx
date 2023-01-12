@@ -20,5 +20,6 @@ export default Router;
 export const RouterPath = {
   index: "/",
   postWrite: "/post-write",
+  postWrite: "/post-write",
   postDetail: "/post/:postID",
 };

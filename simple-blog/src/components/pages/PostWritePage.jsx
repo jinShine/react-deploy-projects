@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { RouterPath } from "../../shared/Router";
-import { __postPost } from "../../redux/modules/postsSlice";
+import { __postPost, __updatePost } from "../../redux/modules/postsSlice";
 
 import styled from "styled-components";
 import Header from "../ui/Header";
@@ -11,19 +11,47 @@ import Textarea from "../ui/Textarea";
 import Wrapper from "../ui/Wrapper";
 
 const PostWritePage = (props) => {
+  const PageType = {
+    WRITE: "write",
+    MODIFY: "modify",
+  };
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { state } = useLocation();
 
   const [title, setTitle] = useState("");
   const [titleError, setTitleError] = useState("");
   const [content, setContent] = useState("");
   const [contentError, setContentError] = useState("");
+  const [actionBtnTitle, setActionBtnTitle] = useState("");
+
+  let pageType = state ? PageType.MODIFY : PageType.WRITE;
+
+  // const [stateData, setStateData] = useState({
+  //   title: "",
+  //   titleError: "",
+  //   content: "",
+  //   contentError: "",
+  //   actionBtnTitle: "",
+  // });
 
   const onSubmitHandler = () => {
     if (validate(title, content)) {
       const payload = { title, content };
 
-      dispatch(__postPost(payload));
+      switch (pageType) {
+        case PageType.WRITE:
+          dispatch(__postPost(payload));
+          break;
+        case PageType.MODIFY:
+          payload.id = state.post.id;
+          dispatch(__updatePost(payload));
+          break;
+        default:
+          break;
+      }
+
       navigate(RouterPath.index);
     }
   };
@@ -41,6 +69,24 @@ const PostWritePage = (props) => {
     }
 
     return title && content;
+  };
+
+  useEffect(() => {
+    updatePageType();
+  }, []);
+
+  const updatePageType = () => {
+    pageType = state ? PageType.MODIFY : PageType.WRITE;
+
+    if (pageType === PageType.MODIFY) {
+      setTitle(state.post.title);
+      setContent(state.post.content);
+      setActionBtnTitle("수정하기");
+    } else {
+      setTitle("");
+      setContent("");
+      setActionBtnTitle("작성하기");
+    }
   };
 
   return (
@@ -66,7 +112,7 @@ const PostWritePage = (props) => {
             }}
             errorMessage={contentError}
           />
-          <Button title="작성하기" onClick={onSubmitHandler} />
+          <Button title={actionBtnTitle} onClick={onSubmitHandler} />
         </SContainer>
       </SWrapper>
     </Wrapper>
