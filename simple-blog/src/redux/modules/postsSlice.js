@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import { http } from "../../api/http";
 import { actionType } from "./actionType";
 
 /* Init value */
@@ -15,10 +15,7 @@ export const __getPosts = createAsyncThunk(
   actionType.posts.GET_POSTS,
   async (_, thunkAPI) => {
     try {
-      //TODO: Axios 인스턴스로 사용하기
-      const result = await axios.get(
-        "https://json-server-deploy-pi.vercel.app/posts"
-      ); //TODO: DOTENV
+      const result = await http.get(process.env.REACT_APP_BASE_URL + "/posts");
       return thunkAPI.fulfillWithValue(result.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -30,8 +27,8 @@ export const __postPost = createAsyncThunk(
   actionType.posts.POST_POST,
   async (post, thunkAPI) => {
     try {
-      const result = await axios.post(
-        "https://json-server-deploy-pi.vercel.app/posts",
+      const result = await http.post(
+        process.env.REACT_APP_BASE_URL + "/posts",
         post
       );
       return thunkAPI.fulfillWithValue(result.data);
@@ -45,8 +42,8 @@ export const __getPost = createAsyncThunk(
   actionType.posts.GET_POST,
   async (postID, thunkAPI) => {
     try {
-      const result = await axios.get(
-        `https://json-server-deploy-pi.vercel.app/posts/${postID}`
+      const result = await http.get(
+        process.env.REACT_APP_BASE_URL + `/posts/${postID}`
       );
       return thunkAPI.fulfillWithValue(result.data);
     } catch (error) {
@@ -59,9 +56,7 @@ export const __deletePost = createAsyncThunk(
   actionType.posts.DELETE_POST,
   async (postID, thunkAPI) => {
     try {
-      const result = await axios.delete(
-        `https://json-server-deploy-pi.vercel.app/posts/${postID}`
-      );
+      await http.delete(process.env.REACT_APP_BASE_URL + `/posts/${postID}`);
       return thunkAPI.fulfillWithValue(postID);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -73,8 +68,8 @@ export const __updatePost = createAsyncThunk(
   actionType.posts.PUT_POST,
   async (post, thunkAPI) => {
     try {
-      const result = await axios.patch(
-        `https://json-server-deploy-pi.vercel.app/posts/${post.id}`,
+      const result = await http.patch(
+        process.env.REACT_APP_BASE_URL + `/posts/${post.id}`,
         post
       );
 

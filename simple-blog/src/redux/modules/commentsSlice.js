@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import { http } from "../../api/http";
 import { actionType } from "./actionType";
 
 /* Init value */
@@ -10,28 +10,13 @@ const initialState = {
   error: null,
 };
 
-/* Thunk */
-// export const __getPosts = createAsyncThunk(
-//   actionType.get.GET_POSTS,
-//   async (_, thunkAPI) => {
-//     try {
-//       //TODO: Axios 인스턴스로 사용하기
-//       const result = await axios.get("http://localhost:3001/posts"); //TODO: DOTENV
-//       console.log(result);
-//       return thunkAPI.fulfillWithValue(result.data);
-//     } catch (error) {
-//       console.log(error);
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
-
+/* Thunks */
 export const __postComment = createAsyncThunk(
   actionType.comments.POST_COMMENT,
   async (comment, thunkAPI) => {
     try {
-      const result = await axios.post(
-        "https://json-server-deploy-pi.vercel.app/comments",
+      const result = await http.post(
+        process.env.REACT_APP_BASE_URL + "/comments",
         comment
       );
       console.log(result);
@@ -52,8 +37,8 @@ export const __getCommentsByTodoId = createAsyncThunk(
   actionType.comments.GET_COMMENT_BY_POST_ID,
   async (postID, thunkAPI) => {
     try {
-      const result = await axios.get(
-        `https://json-server-deploy-pi.vercel.app/comments?postId=${postID}`
+      const result = await http.get(
+        process.env.REACT_APP_BASE_URL + `/comments?postId=${postID}`
       );
       console.log(result);
 
@@ -69,8 +54,8 @@ export const __deleteComment = createAsyncThunk(
   actionType.comments.DELETE_COMMENT,
   async (commentID, thunkAPI) => {
     try {
-      const result = await axios.delete(
-        `https://json-server-deploy-pi.vercel.app/comments/${commentID}`
+      const result = await http.delete(
+        process.env.REACT_APP_BASE_URL + `/comments/${commentID}`
       );
       console.log(result);
       return thunkAPI.fulfillWithValue(commentID);
@@ -86,8 +71,8 @@ export const __updateComment = createAsyncThunk(
   async (comment, thunkAPI) => {
     console.log("Payload", comment);
     try {
-      const result = await axios.patch(
-        `https://json-server-deploy-pi.vercel.app/comments/${comment.id}`,
+      const result = await http.patch(
+        process.env.REACT_APP_BASE_URL + `/comments/${comment.id}`,
         comment
       );
       console.log(result);
