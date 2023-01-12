@@ -31,7 +31,7 @@ export const __postComment = createAsyncThunk(
   async (comment, thunkAPI) => {
     try {
       const result = await axios.post(
-        "http://localhost:3001/comments",
+        "https://json-server-deploy-pi.vercel.app/comments",
         comment
       );
       console.log(result);
@@ -53,7 +53,7 @@ export const __getCommentsByTodoId = createAsyncThunk(
   async (postID, thunkAPI) => {
     try {
       const result = await axios.get(
-        `http://localhost:3001/comments?postId=${postID}`
+        `https://json-server-deploy-pi.vercel.app/comments?postId=${postID}`
       );
       console.log(result);
 
@@ -70,7 +70,7 @@ export const __deleteComment = createAsyncThunk(
   async (commentID, thunkAPI) => {
     try {
       const result = await axios.delete(
-        `http://localhost:3001/comments/${commentID}`
+        `https://json-server-deploy-pi.vercel.app/comments/${commentID}`
       );
       console.log(result);
       return thunkAPI.fulfillWithValue(commentID);
@@ -87,7 +87,7 @@ export const __updateComment = createAsyncThunk(
     console.log("Payload", comment);
     try {
       const result = await axios.patch(
-        `http://localhost:3001/comments/${comment.id}`,
+        `https://json-server-deploy-pi.vercel.app/comments/${comment.id}`,
         comment
       );
       console.log(result);

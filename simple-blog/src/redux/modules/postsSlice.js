@@ -16,11 +16,11 @@ export const __getPosts = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       //TODO: Axios 인스턴스로 사용하기
-      const result = await axios.get("http://localhost:3001/posts"); //TODO: DOTENV
-      console.log(result);
+      const result = await axios.get(
+        "https://json-server-deploy-pi.vercel.app/posts"
+      ); //TODO: DOTENV
       return thunkAPI.fulfillWithValue(result.data);
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -30,11 +30,12 @@ export const __postPost = createAsyncThunk(
   actionType.posts.POST_POST,
   async (post, thunkAPI) => {
     try {
-      const result = await axios.post("http://localhost:3001/posts", post);
-      console.log(result);
+      const result = await axios.post(
+        "https://json-server-deploy-pi.vercel.app/posts",
+        post
+      );
       return thunkAPI.fulfillWithValue(result.data);
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -44,11 +45,11 @@ export const __getPost = createAsyncThunk(
   actionType.posts.GET_POST,
   async (postID, thunkAPI) => {
     try {
-      const result = await axios.get(`http://localhost:3001/posts/${postID}`);
-      console.log(result);
+      const result = await axios.get(
+        `https://json-server-deploy-pi.vercel.app/posts/${postID}`
+      );
       return thunkAPI.fulfillWithValue(result.data);
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -59,12 +60,10 @@ export const __deletePost = createAsyncThunk(
   async (postID, thunkAPI) => {
     try {
       const result = await axios.delete(
-        `http://localhost:3001/posts/${postID}`
+        `https://json-server-deploy-pi.vercel.app/posts/${postID}`
       );
-      console.log(result);
       return thunkAPI.fulfillWithValue(postID);
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -73,13 +72,11 @@ export const __deletePost = createAsyncThunk(
 export const __updatePost = createAsyncThunk(
   actionType.posts.PUT_POST,
   async (post, thunkAPI) => {
-    console.log(">>>>>>>>>>>>>>>>>>>", post);
     try {
       const result = await axios.patch(
-        `http://localhost:3001/posts/${post.id}`,
+        `https://json-server-deploy-pi.vercel.app/posts/${post.id}`,
         post
       );
-      console.log(result);
 
       if (result.status === 200) {
         thunkAPI.dispatch(__getPosts());
@@ -87,7 +84,6 @@ export const __updatePost = createAsyncThunk(
 
       return thunkAPI.fulfillWithValue(result.data);
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue(error);
     }
   }
