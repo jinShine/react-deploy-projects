@@ -29,7 +29,7 @@ export const __postPost = createAsyncThunk(
     try {
       const result = await http.post(
         process.env.REACT_APP_BASE_URL + "/posts",
-        post
+        {}
       );
       return thunkAPI.fulfillWithValue(result.data);
     } catch (error) {
