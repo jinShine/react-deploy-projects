@@ -7,6 +7,7 @@ export const globalStyle = css`
 
   * {
     box-sizing: border-box;
+    font-size: 18px;
   }
 
   body {
