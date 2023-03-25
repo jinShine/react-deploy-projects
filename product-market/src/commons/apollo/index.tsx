@@ -8,7 +8,7 @@ import {
 } from "@apollo/client";
 
 interface IApolloSettingProps {
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
 }
 
 const cache = new InMemoryCache();
