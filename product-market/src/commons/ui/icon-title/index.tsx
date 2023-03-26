@@ -12,7 +12,7 @@ export const IconTitle = (props: IProps) => {
   return (
     <Wrapper onClick={props.onClick}>
       {props.count != null ? (
-        <Badge count={props.count} showZero>
+        <Badge count={props.count} showZero size="small">
           <ImageWrapper>{props.children}</ImageWrapper>
         </Badge>
       ) : (

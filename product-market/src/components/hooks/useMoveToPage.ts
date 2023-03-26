@@ -6,9 +6,9 @@ export const useMoveToPage = () => {
   const router = useRouter();
   const [visitedPage, setVisitedPage] = useRecoilState(visitedPageState);
 
-  const push = (path: string) => {
+  const push = (path: string, seconds: number = 0, callback?: () => void) => {
     setVisitedPage(path);
-    void router.push(path);
+    setTimeout(() => void router.push(path), seconds * 1000);
   };
 
   return {

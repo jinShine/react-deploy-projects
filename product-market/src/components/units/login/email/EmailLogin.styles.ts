@@ -12,7 +12,7 @@ export const TitleWrapper = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   margin-top: 50px;
-  margin-bottom: 24px;
+  margin-bottom: 34px;
 `;
 
 export const Title = styled.h2`
@@ -29,7 +29,7 @@ export const FormWrapper = styled.form`
 
 export const InputField = styled(Input)`
   height: 46px;
-  margin-top: 16px;
+  margin-top: 6px;
 `;
 
 export const InputPasswordField = styled(Input.Password)`

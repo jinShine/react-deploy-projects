@@ -9,14 +9,14 @@ import Layout from "src/commons/layout/Layout";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
-      <ThemeProvider theme={globalTheme}>
-        <ApolloSetting>
+      <ApolloSetting>
+        <ThemeProvider theme={globalTheme}>
           <GlobalStyles />
           <Layout>
             <Component {...pageProps} />
           </Layout>
-        </ApolloSetting>
-      </ThemeProvider>
+        </ThemeProvider>
+      </ApolloSetting>
     </RecoilRoot>
   );
 }

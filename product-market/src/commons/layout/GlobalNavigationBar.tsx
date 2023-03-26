@@ -2,15 +2,21 @@ import styled from "@emotion/styled";
 import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import { useMoveToPage } from "src/components/hooks/useMoveToPage";
 import { IconTitle } from "../ui/icon-title";
+import { useAuth } from "src/components/hooks/useAuth";
 
 export default function GlobalNavigationBar() {
   const { push } = useMoveToPage();
+
+  const { isLoggedIn } = useAuth();
 
   return (
     <Wrapper>
       <LogoWrapper onClick={() => push("/login")}>Logo</LogoWrapper>
       <IconWrapper>
-        <IconTitle title="로그인" onClick={() => push("/login/email")}>
+        <IconTitle
+          title={isLoggedIn ? "김승진님" : "로그인"}
+          onClick={() => push("/login/email")}
+        >
           <UserOutlined />
         </IconTitle>
         <IconTitle title="장바구니" count={0}>
