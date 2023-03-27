@@ -22,9 +22,10 @@ export default function ApolloSetting(props: IApolloSettingProps) {
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
 
   useEffect(() => {
-    // void updateAccessToken().then((newAccessToken) => {
-    //   setAccessToken(newAccessToken);
-    // });
+    void updateAccessToken().then((newAccessToken) => {
+      console.log("# 아폴로 업데이트", newAccessToken);
+      setAccessToken(newAccessToken);
+    });
   }, []);
 
   const errorLink = onError(({ graphQLErrors, operation, forward }) => {
@@ -57,8 +58,7 @@ export default function ApolloSetting(props: IApolloSettingProps) {
   });
 
   const client = new ApolloClient({
-    // link: ApolloLink.from([errorLink, uploadLink]),
-    link: ApolloLink.from([uploadLink]),
+    link: ApolloLink.from([errorLink, uploadLink]),
     cache,
     connectToDevTools: true,
   });

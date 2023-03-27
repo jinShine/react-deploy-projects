@@ -13,7 +13,6 @@ import {
   FETCH_USER_LOGGED_IN,
   LOGIN_USER,
   LOGIN_USER_EXAMPLE,
-  LOGOUT_USER,
 } from "./queries";
 
 export interface AuthCompletion {
@@ -47,8 +46,6 @@ export const useAuth = () => {
     IMutationCreateUserArgs
   >(CREATE_USER);
 
-  const [logoutUser] = useMutation<Pick<IMutation, "logoutUser">>(LOGOUT_USER);
-
   const join = async (
     name: string,
     email: string,
@@ -81,10 +78,8 @@ export const useAuth = () => {
     try {
       const result = await loginUser({
         variables: {
-          // email,
-          // password,
-          email: "buzz1@gmail.com",
-          password: "123",
+          email,
+          password,
         },
       });
 
@@ -97,7 +92,6 @@ export const useAuth = () => {
       }
 
       setAccessToken(accessTokenData);
-
       return { success: true };
     } catch (error) {
       return {
@@ -117,7 +111,6 @@ export const useAuth = () => {
   };
 
   const logout = async () => {
-    // await logoutUser();
     clear();
   };
 

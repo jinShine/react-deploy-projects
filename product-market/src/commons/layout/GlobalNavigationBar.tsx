@@ -8,12 +8,20 @@ import styled from "@emotion/styled";
 import { Button } from "antd";
 import { useAuth } from "src/components/hooks/useAuth";
 import { useMoveToPage } from "src/components/hooks/useMoveToPage";
+import { useToast } from "src/components/hooks/useToast";
 import { IconTitle } from "../ui/icon-title";
 import { PopoverView } from "../ui/pop-over";
 
 export default function GlobalNavigationBar() {
   const { push } = useMoveToPage();
   const { isLoggedIn, userInfo, logout } = useAuth();
+  const [toast, toastHolder] = useToast();
+
+  const onClickLogout = () => {
+    logout();
+
+    toast.success("로그아웃 되었습니다.");
+  };
 
   const content = (
     <PopOverWrapper>
@@ -24,7 +32,7 @@ export default function GlobalNavigationBar() {
         충전하기
       </Button>
       <Divider />
-      <Button type="text" icon={<ExportOutlined />} onClick={logout}>
+      <Button type="text" icon={<ExportOutlined />} onClick={onClickLogout}>
         로그아웃
       </Button>
     </PopOverWrapper>
@@ -32,7 +40,8 @@ export default function GlobalNavigationBar() {
 
   return (
     <Wrapper>
-      <LogoWrapper onClick={() => push("/login")}>Logo</LogoWrapper>
+      {toastHolder}
+      <LogoWrapper onClick={() => push("/")}>Logo</LogoWrapper>
       <IconWrapper>
         {isLoggedIn ? (
           <PopoverView content={content} trigger="click">
