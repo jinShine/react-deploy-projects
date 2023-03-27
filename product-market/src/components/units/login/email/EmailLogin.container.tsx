@@ -1,5 +1,3 @@
-import { gql, useMutation } from "@apollo/client";
-import { IMutation } from "src/commons/types/graphql/types";
 import { useAuth } from "src/components/hooks/useAuth";
 import { useMoveToPage } from "src/components/hooks/useMoveToPage";
 import { useToast } from "src/components/hooks/useToast";
@@ -8,19 +6,8 @@ import { IEmailLoginFormInput } from "./EmailLogin.types";
 
 export default function EmailLogin() {
   const { push } = useMoveToPage();
-  const { isLoggedIn, emailLogin } = useAuth();
+  const { emailLogin, fetchUserInfo } = useAuth();
   const [toast, toastHolder] = useToast();
-
-  const RESTORE_ACCESS_TOKEN = gql`
-    mutation restoreAccessToken {
-      restoreAccessToken {
-        accessToken
-      }
-    }
-  `;
-
-  const [restoreAccessToken] =
-    useMutation<Pick<IMutation, "restoreAccessToken">>(RESTORE_ACCESS_TOKEN);
 
   const onClickSubmit = async (data: IEmailLoginFormInput) => {
     emailLogin(data.email, data.password).then((result) => {

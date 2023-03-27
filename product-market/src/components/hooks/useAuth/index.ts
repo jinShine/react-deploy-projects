@@ -1,64 +1,35 @@
-import { gql, useLazyQuery, useMutation } from "@apollo/client";
-import { useEffect } from "react";
+import { useApolloClient, useMutation } from "@apollo/client";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { accessTokenState, isLoggedInState } from "src/commons/store";
+import { accessTokenState, useInfoState } from "src/commons/store";
 import {
   IMutation,
   IMutationCreateUserArgs,
   IMutationLoginUserArgs,
   IMutationLoginUserExampleArgs,
 } from "src/commons/types/graphql/types";
+import {
+  CREATE_USER,
+  FETCH_USER_LOGGED_IN,
+  LOGIN_USER,
+  LOGIN_USER_EXAMPLE,
+  LOGOUT_USER,
+} from "./queries";
 
 export interface AuthCompletion {
   success: boolean;
   message?: string;
 }
 
-/** 로그인 */
-const LOGIN_USER = gql`
-  mutation loginUser($email: String!, $password: String!) {
-    loginUser(email: $email, password: $password) {
-      accessToken
-    }
-  }
-`;
-
-/** 로그인(테스트) */
-const LOGIN_USER_EXAMPLE = gql`
-  mutation loginUserExample($email: String!, $password: String!) {
-    loginUserExample(email: $email, password: $password) {
-      accessToken
-    }
-  }
-`;
-
-/** 회원가입 */
-export const CREATE_USER = gql`
-  mutation createUser($createUserInput: CreateUserInput!) {
-    createUser(createUserInput: $createUserInput) {
-      _id
-    }
-  }
-`;
-
-/** 로그인 정보 */
-const FETCH_USER_LOGGED_IN = gql`
-  query fetchUserLoggedIn {
-    fetchUserLoggedIn {
-      _id
-      email
-      name
-      createdAt
-    }
-  }
-`;
-
 export const useAuth = () => {
+  const client = useApolloClient();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
-  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
+  const [userInfo, setUserInfo] = useRecoilState(useInfoState);
 
   useEffect(() => {
-    setIsLoggedIn(accessToken !== undefined);
+    setIsLoggedIn(accessToken !== "");
   }, [accessToken]);
 
   const [loginUser] = useMutation<
@@ -76,7 +47,7 @@ export const useAuth = () => {
     IMutationCreateUserArgs
   >(CREATE_USER);
 
-  const [fetchUserInfo, { data }] = useLazyQuery(FETCH_USER_LOGGED_IN);
+  const [logoutUser] = useMutation<Pick<IMutation, "logoutUser">>(LOGOUT_USER);
 
   const join = async (
     name: string,
@@ -136,15 +107,31 @@ export const useAuth = () => {
     }
   };
 
-  const logout = () => {
+  const fetchUserInfo = async () => {
+    const result = await client.query({
+      query: FETCH_USER_LOGGED_IN,
+    });
+    const { name, email, picture } = result.data.fetchUserLoggedIn;
+
+    setUserInfo({ name, email, picture });
+  };
+
+  const logout = async () => {
+    // await logoutUser();
     clear();
   };
 
-  const clear = () => {};
+  const clear = () => {
+    setAccessToken("");
+    setUserInfo(null);
+  };
 
   return {
     isLoggedIn,
+    userInfo,
     join,
     emailLogin,
+    logout,
+    fetchUserInfo,
   };
 };

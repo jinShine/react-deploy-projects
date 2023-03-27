@@ -52,7 +52,7 @@ export default function ApolloSetting(props: IApolloSettingProps) {
 
   const uploadLink = createUploadLink({
     uri: process.env.NEXT_PUBLIC_SERVER_URI,
-    // headers: { Authorization: `Bearer ${accessToken}` },
+    headers: { Authorization: `Bearer ${accessToken}` },
     credentials: "include",
   });
 

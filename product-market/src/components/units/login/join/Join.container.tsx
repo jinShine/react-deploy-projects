@@ -8,7 +8,7 @@ export default function Join() {
   const { push } = useMoveToPage();
   const [toast, toastHolder] = useToast();
 
-  const { join, isLoggedIn } = useAuth();
+  const { join } = useAuth();
 
   const onClickSubmit = (data: IJoinFormInput) => {
     console.log(data);

@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
+import { IUserInfo } from "../types/userInfo";
 
 const { persistAtom } = recoilPersist();
 
@@ -14,7 +15,8 @@ export const accessTokenState = atom<string>({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const isLoggedInState = atom({
-  key: `isLoggedInState`,
-  default: false,
+export const useInfoState = atom<IUserInfo | null>({
+  key: `useInfoState`,
+  default: null,
+  effects_UNSTABLE: [persistAtom],
 });
