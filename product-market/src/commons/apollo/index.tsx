@@ -23,7 +23,6 @@ export default function ApolloSetting(props: IApolloSettingProps) {
 
   useEffect(() => {
     void updateAccessToken().then((newAccessToken) => {
-      console.log("# 아폴로 업데이트", newAccessToken);
       setAccessToken(newAccessToken);
     });
   }, []);

@@ -36,3 +36,10 @@ export const ItemsWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
+
+export const ProductWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 120px;
+`;

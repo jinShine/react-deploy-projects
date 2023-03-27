@@ -1,8 +1,13 @@
 import styled from "@emotion/styled";
 
-export const EmptyImage = () => {
+interface IProps {
+  width?: number;
+  height?: number;
+}
+
+export const EmptyImage = (props: IProps) => {
   return (
-    <Wrapper>
+    <Wrapper style={{ height: props.height, width: props.width }}>
       <Empty src="/images/ic-empty.svg" />
     </Wrapper>
   );

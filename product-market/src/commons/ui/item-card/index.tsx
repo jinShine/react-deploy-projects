@@ -20,11 +20,11 @@ export const ItemCard = (props: IProps) => {
       <Name>{props.title ? props.title : "제목없음"}</Name>
       <Remark>{props.remarks}</Remark>
       <PriceWrapper>
-        <Price>{`${props.price?.toLocaleString()}원`}</Price>
         <PickWrapper>
           <PickImage src="/images/ic-heart.svg" />
           <PickCount>{props.pickCount ?? 0}</PickCount>
         </PickWrapper>
+        <Price>{`${props.price?.toLocaleString()}원`}</Price>
       </PriceWrapper>
     </Wrapper>
   );

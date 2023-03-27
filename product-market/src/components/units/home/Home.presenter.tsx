@@ -1,10 +1,16 @@
 import Head from "next/head";
-import { IUseditem } from "src/commons/types/graphql/types";
+import InfiniteScroll from "react-infinite-scroller";
+import { IQuery } from "src/commons/types/graphql/types";
 import { ItemCard } from "src/commons/ui/item-card";
+import ItemList from "src/commons/ui/item-list";
 import * as S from "./Home.styles";
 
 interface IProps {
-  itemsOfBestDatas?: IUseditem[] | null;
+  itemsOfBestDatas?: Pick<IQuery, "fetchUseditemsOfTheBest">;
+  pageStart: number;
+  onLoadMore?: (page: number) => void;
+  hasMore?: boolean;
+  usedItemsData?: Pick<IQuery, "fetchUseditems">;
 }
 
 export default function HomeUI(props: IProps) {
@@ -32,8 +38,8 @@ export default function HomeUI(props: IProps) {
         <S.BestItemsWrapper>
           <S.BestItemTitle>베스트 상품</S.BestItemTitle>
           <S.ItemsWrapper>
-            {props.itemsOfBestDatas &&
-              props.itemsOfBestDatas?.map((el) => (
+            {props.itemsOfBestDatas?.fetchUseditemsOfTheBest &&
+              props.itemsOfBestDatas?.fetchUseditemsOfTheBest.map((el) => (
                 <ItemCard
                   key={el._id}
                   title={el.name}
@@ -44,6 +50,26 @@ export default function HomeUI(props: IProps) {
               ))}
           </S.ItemsWrapper>
         </S.BestItemsWrapper>
+        <S.ProductWrapper>
+          <InfiniteScroll
+            pageStart={props.pageStart}
+            loadMore={props.onLoadMore}
+            hasMore={props.hasMore}
+            useWindow={true}
+          >
+            {props.usedItemsData ? (
+              props.usedItemsData?.fetchUseditems.map((el, index) => (
+                <ItemList
+                  id={el._id}
+                  key={`${el._id}` + `${index}`}
+                  data={el}
+                />
+              ))
+            ) : (
+              <></>
+            )}
+          </InfiniteScroll>
+        </S.ProductWrapper>
       </S.Wrapper>
     </>
   );
