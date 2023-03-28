@@ -43,3 +43,9 @@ export const ProductWrapper = styled.div`
   flex-direction: column;
   margin-top: 120px;
 `;
+
+export const SelectedTab = styled.span`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${(props) => props.theme.color.primary};
+`;

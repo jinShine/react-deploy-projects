@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Image } from "antd";
 import { EmptyImage } from "../empty-image";
 
 interface IProps {
@@ -13,7 +14,7 @@ export const ItemCard = (props: IProps) => {
   return (
     <Wrapper>
       {props.imgURL ? (
-        <Thumbnail src={props.imgURL} alt="상품 이미지" />
+        <Thumbnail src={props.imgURL} alt="상품 이미지" width={"100%"} />
       ) : (
         <EmptyImage />
       )}
@@ -43,7 +44,7 @@ export const Wrapper = styled.div`
   padding: 10px;
 `;
 
-export const Thumbnail = styled.img`
+export const Thumbnail = styled(Image)`
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
@@ -88,7 +89,7 @@ export const PickWrapper = styled.div`
 `;
 
 export const PickImage = styled.img`
-  height: 11px;
+  height: 16px;
   aspect-ratio: 1;
 `;
 

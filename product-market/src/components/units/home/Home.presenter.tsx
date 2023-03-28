@@ -1,19 +1,42 @@
+import { globalTheme } from "@/styles/theme/globalTheme";
+import type { TabsProps } from "antd";
+import { Tabs } from "antd";
 import Head from "next/head";
-import InfiniteScroll from "react-infinite-scroller";
-import { IQuery } from "src/commons/types/graphql/types";
 import { ItemCard } from "src/commons/ui/item-card";
-import ItemList from "src/commons/ui/item-list";
+import { HomeItemList } from "./Home.infiniteUI";
 import * as S from "./Home.styles";
+import { IHomeUIProps } from "./Home.types";
 
-interface IProps {
-  itemsOfBestDatas?: Pick<IQuery, "fetchUseditemsOfTheBest">;
-  pageStart: number;
-  onLoadMore?: (page: number) => void;
-  hasMore?: boolean;
-  usedItemsData?: Pick<IQuery, "fetchUseditems">;
-}
+export default function HomeUI(props: IHomeUIProps) {
+  const items: TabsProps["items"] = [
+    {
+      key: "1",
+      label: "판매중인상품",
+      children: (
+        <HomeItemList
+          usedItemsData={props.usedItemsData}
+          pageStart={props.pageStart}
+          onLoadMore={props.onLoadMore}
+          hasMore={props.hasMore}
+          useWindow={true}
+        />
+      ),
+    },
+    {
+      key: "2",
+      label: "판매된상품",
+      children: (
+        <HomeItemList
+          usedItemsData={props.usedItemsData}
+          pageStart={props.pageStart}
+          onLoadMore={props.onLoadMore}
+          hasMore={props.hasMore}
+          useWindow={true}
+        />
+      ),
+    },
+  ];
 
-export default function HomeUI(props: IProps) {
   return (
     <>
       <Head>
@@ -51,24 +74,13 @@ export default function HomeUI(props: IProps) {
           </S.ItemsWrapper>
         </S.BestItemsWrapper>
         <S.ProductWrapper>
-          <InfiniteScroll
-            pageStart={props.pageStart}
-            loadMore={props.onLoadMore}
-            hasMore={props.hasMore}
-            useWindow={true}
-          >
-            {props.usedItemsData ? (
-              props.usedItemsData?.fetchUseditems.map((el, index) => (
-                <ItemList
-                  id={el._id}
-                  key={`${el._id}` + `${index}`}
-                  data={el}
-                />
-              ))
-            ) : (
-              <></>
-            )}
-          </InfiniteScroll>
+          <Tabs
+            defaultActiveKey="1"
+            items={items}
+            type={"card"}
+            tabBarStyle={{ color: globalTheme.text.tertiary }}
+            onChange={props.onChangeTab}
+          />
         </S.ProductWrapper>
       </S.Wrapper>
     </>

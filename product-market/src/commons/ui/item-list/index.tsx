@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Image } from "antd";
 import { IUseditem } from "src/commons/types/graphql/types";
 import { EmptyImage } from "../empty-image";
 import { Tags } from "../tag-list";
@@ -9,15 +10,15 @@ interface IProps {
 
 export default function ItemList(props: IProps) {
   const data = props.data;
-
   return (
     <>
-      <Divider />
       <Wrapper>
         {data?.images?.[0] ? (
           <Thumbnail
             src={`https://storage.googleapis.com/${data?.images?.[0]}`}
             alt="상품 이미지"
+            width={120}
+            height={120}
           />
         ) : (
           <EmptyImage height={120} width={120} />
@@ -39,6 +40,7 @@ export default function ItemList(props: IProps) {
         </InfoWrapper>
         <Price>{`${data?.price?.toLocaleString()}원`}</Price>
       </Wrapper>
+      <Divider />
     </>
   );
 }
@@ -48,12 +50,12 @@ const Wrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  height: 160px;
+  height: 165px;
   width: 100%;
   padding: 14px 0;
 `;
 
-const Thumbnail = styled.img`
+const Thumbnail = styled(Image)`
   object-fit: cover;
   width: 120px;
   height: 120px;
@@ -64,7 +66,7 @@ const InfoWrapper = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   justify-items: center;
-  width: calc(100% - 300px);
+  width: calc(100% - 350px);
   height: 100%;
   padding: 10px 0;
 `;
@@ -88,6 +90,8 @@ const Price = styled.span`
   font-size: 1rem;
   font-weight: 700;
   color: ${(props) => props.theme.text.primary};
+  width: 130px;
+  text-align: end;
 `;
 
 const Divider = styled.div`

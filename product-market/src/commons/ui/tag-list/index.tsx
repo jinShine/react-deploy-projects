@@ -1,30 +1,35 @@
 import styled from "@emotion/styled";
+import { Space, Tag } from "antd";
 
 interface IProps {
-  width?: number;
-  height?: number;
-  fontSize?: number;
   data?: string[] | null;
 }
 
 export const Tags = (props: IProps) => {
   return (
-    <Wrapper>
-      {props.data && props.data.map((el) => <Tag>{`#${el}`}</Tag>)}
+    <Wrapper size={[0, 0]} wrap={false}>
+      {props.data!.length > 0 ? (
+        props.data!.map((el, index) => (
+          <TagContent key={index}>{`#${el}`}</TagContent>
+        ))
+      ) : (
+        <Empty />
+      )}
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  margin-top: 12px;
+const Wrapper = styled(Space)`
+  margin-top: 16px;
   height: 13px;
+  width: 500px;
 `;
 
-const Tag = styled.span`
-  font-size: 13px;
+const TagContent = styled(Tag)`
+  font-size: 8px;
   color: ${(props) => props.theme.text.disable};
+`;
+
+const Empty = styled.div`
+  height: 13px;
 `;

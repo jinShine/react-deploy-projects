@@ -1,44 +1,11 @@
-import { gql } from "@apollo/client";
+import { IQuery } from "src/commons/types/graphql/types";
 
-export const FETCH_USED_ITEMS_OF_BEST = gql`
-  query {
-    fetchUseditemsOfTheBest {
-      _id
-      name
-      remarks
-      contents
-      price
-      images
-      pickedCount
-    }
-  }
-`;
-
-export const FETCH_USED_ITEMS = gql`
-  query fetchUseditems($isSoldout: Boolean, $search: String, $page: Int) {
-    fetchUseditems(isSoldout: $isSoldout, search: $search, page: $page) {
-      _id
-      name
-      remarks
-      contents
-      price
-      tags
-      images
-      pickedCount
-      buyer {
-        _id
-        email
-        name
-        picture
-      }
-      seller {
-        _id
-        email
-        name
-        picture
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
+export interface IHomeUIProps {
+  itemsOfBestDatas?: Pick<IQuery, "fetchUseditemsOfTheBest">;
+  pageStart: number;
+  // onLoadMore?: (page: number) => void;
+  onLoadMore: (page: number) => void;
+  hasMore?: boolean;
+  usedItemsData?: Pick<IQuery, "fetchUseditems">;
+  onChangeTab: (key: string) => void;
+}

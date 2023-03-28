@@ -1,38 +1,51 @@
-import { useQuery } from "@apollo/client";
-import { useEffect } from "react";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
 import {
   IQuery,
   IQueryFetchUseditemsArgs,
 } from "src/commons/types/graphql/types";
 import { useAuth } from "src/components/hooks/useAuth";
 import HomeUI from "./Home.presenter";
-import { FETCH_USED_ITEMS, FETCH_USED_ITEMS_OF_BEST } from "./Home.types";
+import { FETCH_USED_ITEMS, FETCH_USED_ITEMS_OF_BEST } from "./Home.queries";
 
 export default function Home() {
   const { isLoggedIn, fetchUserInfo } = useAuth();
+  const [isSoldout, setIsSoldout] = useState(false);
 
   const { data: itemsOfBestData } = useQuery<
     Pick<IQuery, "fetchUseditemsOfTheBest">
   >(FETCH_USED_ITEMS_OF_BEST);
 
-  const { data: usedItemsData, fetchMore } = useQuery<
+  // const { data: usedItemsData, fetchMore, refetch } = useQuery<
+  //   Pick<IQuery, "fetchUseditems">,
+  //   IQueryFetchUseditemsArgs
+  // >(FETCH_USED_ITEMS);
+
+  const [fetchUsedItems, { data: usedItemsData, fetchMore }] = useLazyQuery<
     Pick<IQuery, "fetchUseditems">,
     IQueryFetchUseditemsArgs
-  >(FETCH_USED_ITEMS);
+  >(FETCH_USED_ITEMS, {
+    // fetchPolicy: "no-cache",
+    // nextFetchPolicy: "cache-first",
+  });
 
   useEffect(() => {
+    fetchUsedItems();
     fetchUserInfo();
   }, []);
 
-  const onLoadMore = (page: number) => {
+  const onLoadMore = async (page: number) => {
     if (!usedItemsData) return;
 
     const nextPage =
       Math.ceil((usedItemsData.fetchUseditems.length ?? 10) / 10) + 1;
 
-    fetchMore({
-      variables: { isSoldout: false, search: "", page: nextPage },
+    await fetchMore({
+      variables: { isSoldout, search: "", page: nextPage },
       updateQuery: (prev, { fetchMoreResult }) => {
+        console.log("######### 1:", prev);
+        console.log("######### 2:", fetchMoreResult);
+
         if (fetchMoreResult.fetchUseditems === undefined) {
           return { fetchUseditems: [...prev.fetchUseditems] };
         }
@@ -47,6 +60,13 @@ export default function Home() {
     });
   };
 
+  const onChangeTab = (key: string) => {
+    setIsSoldout(key !== "1");
+    fetchUsedItems({
+      variables: { isSoldout: key !== "1", search: "", page: 0 },
+    });
+  };
+
   return (
     <HomeUI
       itemsOfBestDatas={itemsOfBestData}
@@ -54,6 +74,7 @@ export default function Home() {
       onLoadMore={onLoadMore}
       hasMore={true}
       usedItemsData={usedItemsData}
+      onChangeTab={onChangeTab}
     />
   );
 }
