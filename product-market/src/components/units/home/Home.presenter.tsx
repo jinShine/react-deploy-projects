@@ -1,5 +1,6 @@
 import { globalTheme } from "@/styles/theme/globalTheme";
-import type { TabsProps } from "antd";
+import { EditOutlined } from "@ant-design/icons";
+import { ConfigProvider, FloatButton, TabsProps } from "antd";
 import { Tabs } from "antd";
 import Head from "next/head";
 import { ItemCard } from "src/commons/ui/item-card";
@@ -45,8 +46,18 @@ export default function HomeUI(props: IHomeUIProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <S.Wrapper>
+        <ConfigProvider
+          theme={{ token: { colorPrimary: `${globalTheme.color.primary}` } }}
+        >
+          <FloatButton
+            type="primary"
+            icon={<EditOutlined />}
+            tooltip={<div>상품등록하기</div>}
+            style={{ right: 35, width: 50, height: 50 }}
+            onClick={props.onClickProductRegister}
+          />
+        </ConfigProvider>
         <S.CarouselWrapper autoplay>
           <div>
             <S.CarouselContent src="/images/banner-1.jpg" />

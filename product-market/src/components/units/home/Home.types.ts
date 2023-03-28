@@ -8,4 +8,5 @@ export interface IHomeUIProps {
   hasMore?: boolean;
   usedItemsData?: Pick<IQuery, "fetchUseditems">;
   onChangeTab: (key: string) => void;
+  onClickProductRegister: () => void;
 }

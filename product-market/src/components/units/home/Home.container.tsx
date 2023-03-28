@@ -5,10 +5,12 @@ import {
   IQueryFetchUseditemsArgs,
 } from "src/commons/types/graphql/types";
 import { useAuth } from "src/components/hooks/useAuth";
+import { useMoveToPage } from "src/components/hooks/useMoveToPage";
 import HomeUI from "./Home.presenter";
 import { FETCH_USED_ITEMS, FETCH_USED_ITEMS_OF_BEST } from "./Home.queries";
 
 export default function Home() {
+  const { push } = useMoveToPage();
   const { isLoggedIn, fetchUserInfo } = useAuth();
   const [isSoldout, setIsSoldout] = useState(false);
 
@@ -25,8 +27,7 @@ export default function Home() {
     Pick<IQuery, "fetchUseditems">,
     IQueryFetchUseditemsArgs
   >(FETCH_USED_ITEMS, {
-    // fetchPolicy: "no-cache",
-    // nextFetchPolicy: "cache-first",
+    variables: { isSoldout },
   });
 
   useEffect(() => {
@@ -67,6 +68,14 @@ export default function Home() {
     });
   };
 
+  const onClickProductRegister = () => {
+    if (isLoggedIn) {
+      push("/product/register");
+    } else {
+      push("/login/email");
+    }
+  };
+
   return (
     <HomeUI
       itemsOfBestDatas={itemsOfBestData}
@@ -75,6 +84,7 @@ export default function Home() {
       hasMore={true}
       usedItemsData={usedItemsData}
       onChangeTab={onChangeTab}
+      onClickProductRegister={onClickProductRegister}
     />
   );
 }

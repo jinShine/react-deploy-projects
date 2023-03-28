@@ -3,7 +3,6 @@ import ItemList from "src/commons/ui/item-list";
 import { IHomeUIProps } from "./Home.types";
 
 export function HomeItemList(props: IHomeUIProps) {
-  console.log("###########", props.usedItemsData);
   return (
     <InfiniteScroll
       pageStart={props.pageStart}
