@@ -1,18 +1,21 @@
 import styled from "@emotion/styled";
 import { Image } from "antd";
+import { MouseEvent } from "react";
 import { EmptyImage } from "../empty-image";
 
 interface IProps {
+  id: string;
   imgURL?: string | null;
   title: string;
   remarks: string;
   price: number;
   pickCount: number;
+  onClickItem: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
 export const ItemCard = (props: IProps) => {
   return (
-    <Wrapper>
+    <Wrapper id={props.id} onClick={props.onClickItem}>
       {props.imgURL ? (
         <Thumbnail src={props.imgURL} alt="상품 이미지" width={"100%"} />
       ) : (

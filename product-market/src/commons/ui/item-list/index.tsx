@@ -1,18 +1,21 @@
 import styled from "@emotion/styled";
 import { Image } from "antd";
+import { MouseEvent } from "react";
 import { IUseditem } from "src/commons/types/graphql/types";
 import { EmptyImage } from "../empty-image";
 import { Tags } from "../tag-list";
 
 interface IProps {
+  id: string;
   data?: IUseditem;
+  onClickItem: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
 export default function ItemList(props: IProps) {
   const data = props.data;
   return (
     <>
-      <Wrapper>
+      <Wrapper id={props.id} onClick={props.onClickItem}>
         {data?.images?.[0] ? (
           <Thumbnail
             src={`https://storage.googleapis.com/${data?.images?.[0]}`}

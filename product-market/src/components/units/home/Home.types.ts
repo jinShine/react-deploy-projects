@@ -1,3 +1,4 @@
+import { MouseEvent } from "react";
 import { IQuery } from "src/commons/types/graphql/types";
 
 export interface IHomeUIProps {
@@ -9,4 +10,5 @@ export interface IHomeUIProps {
   usedItemsData?: Pick<IQuery, "fetchUseditems">;
   onChangeTab: (key: string) => void;
   onClickProductRegister: () => void;
+  onClickItem: (event: MouseEvent<HTMLDivElement>) => void;
 }

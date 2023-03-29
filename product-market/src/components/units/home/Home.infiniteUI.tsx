@@ -12,7 +12,12 @@ export function HomeItemList(props: IHomeUIProps) {
     >
       {props.usedItemsData ? (
         props.usedItemsData?.fetchUseditems.map((el, index) => (
-          <ItemList id={el._id} key={`${el._id}` + `${index}`} data={el} />
+          <ItemList
+            id={el._id}
+            key={`${el._id}` + `${index}`}
+            data={el}
+            onClickItem={props.onClickItem}
+          />
         ))
       ) : (
         <></>

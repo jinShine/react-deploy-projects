@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { useEffect, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import {
   IQuery,
   IQueryFetchUseditemsArgs,
@@ -69,6 +69,10 @@ export default function Home() {
     }
   };
 
+  const onClickItem = (event: MouseEvent<HTMLDivElement>) => {
+    push(`/product/${event.currentTarget.id}`);
+  };
+
   return (
     <HomeUI
       itemsOfBestDatas={itemsOfBestData}
@@ -78,6 +82,7 @@ export default function Home() {
       usedItemsData={usedItemsData}
       onChangeTab={onChangeTab}
       onClickProductRegister={onClickProductRegister}
+      onClickItem={onClickItem}
     />
   );
 }

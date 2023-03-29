@@ -20,6 +20,7 @@ export default function HomeUI(props: IHomeUIProps) {
           onLoadMore={props.onLoadMore}
           hasMore={props.hasMore}
           useWindow={true}
+          onClickItem={props.onClickItem}
         />
       ),
     },
@@ -33,6 +34,7 @@ export default function HomeUI(props: IHomeUIProps) {
           onLoadMore={props.onLoadMore}
           hasMore={props.hasMore}
           useWindow={true}
+          onClickItem={props.onClickItem}
         />
       ),
     },
@@ -75,11 +77,13 @@ export default function HomeUI(props: IHomeUIProps) {
             {props.itemsOfBestDatas?.fetchUseditemsOfTheBest &&
               props.itemsOfBestDatas?.fetchUseditemsOfTheBest.map((el) => (
                 <ItemCard
+                  id={el._id}
                   key={el._id}
                   title={el.name}
                   remarks={el.remarks}
                   price={el.price ?? 0}
                   pickCount={el.pickedCount ?? 0}
+                  onClickItem={props.onClickItem}
                 />
               ))}
           </S.ItemsWrapper>
