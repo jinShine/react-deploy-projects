@@ -8,7 +8,9 @@ export const useMoveToPage = () => {
 
   const push = (path: string, seconds: number = 0, callback?: () => void) => {
     setVisitedPage(path);
-    setTimeout(() => void router.push(path), seconds * 1000);
+    setTimeout(() => {
+      void router.push(path);
+    }, seconds * 1000);
   };
 
   return {

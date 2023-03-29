@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import { Button, Input } from "antd";
 import dynamic from "next/dynamic";
+import { KakaoMap } from "src/commons/ui/kakao-map";
+import { ISubmitButtonProps } from "./Register.types";
 
 const ReactQuill = dynamic(async () => await import("react-quill"), {
   ssr: false,
@@ -66,7 +68,7 @@ export const Contents = styled(ReactQuill)`
 export const ZipcodeWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
 `;
 
 export const PostSearchButton = styled(Button)`
@@ -77,7 +79,7 @@ export const PostSearchButton = styled(Button)`
   font-weight: 500;
 `;
 
-export const KakaoMap = styled.div`
+export const KakaoMapWrapper = styled(KakaoMap)`
   height: 180px;
   aspect-ratio: 1.8;
   margin-left: 50px;
@@ -94,21 +96,14 @@ export const SubmitWrapper = styled.div`
 export const SubmitButton = styled(Button)`
   height: 46px;
   width: 20%;
-  background-color: ${(props) => props.theme.text.disable};
+  background-color: ${(props: ISubmitButtonProps) => props.isActivedColor};
   color: white;
   font-size: 12px;
   font-weight: 500;
-
-  /* background-color: ${(props: ISubmitButtonProps) =>
-    props.isActive ? "yellow" : "none"}; */
 `;
 
-export const Error = styled.div`
-  padding-top: 10px;
-  font-size: 14px;
-  color: red;
+export const ErrorMessage = styled.p`
+  color: ${(props) => props.theme.color.error};
+  font-size: 12px;
+  padding: 4px;
 `;
-
-// export const AddressModal = styled(Modal)``;
-
-// export const AddressSearchInput = styled(DaumPostcode)``;

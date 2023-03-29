@@ -1,12 +1,15 @@
 import { globalTheme } from "@/styles/theme/globalTheme";
 import { PlusOutlined } from "@ant-design/icons";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Space, Upload, UploadFile } from "antd";
 import { UploadChangeParam } from "antd/es/upload";
-import { useEffect } from "react";
+import { JSXElementConstructor, ReactElement } from "react";
 import { Controller, useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
+import { KakaoMap } from "src/commons/ui/kakao-map";
+import { AddressInfo } from "src/components/hooks/usePostcode";
 import * as S from "./Register.styles";
-import { IProductRegisterInput } from "./Register.types";
+import { IProductRegisterInput, productRegisterSchema } from "./Register.types";
 
 interface IProps {
   onClickSubmit: (data: IProductRegisterInput) => void;
@@ -14,57 +17,20 @@ interface IProps {
     | ((info: UploadChangeParam<UploadFile<any>>) => void)
     | undefined;
   onPreviewAttachedImage: ((file: UploadFile<any>) => void) | undefined;
+  onClickPostSearch: () => void;
+  addressInfo: AddressInfo;
+  toastHolder: ReactElement<any, string | JSXElementConstructor<any>>;
 }
-
-declare const window: typeof globalThis & {
-  kakao: any;
-};
 
 export default function ProductRegisterUI(props: IProps) {
   const { handleSubmit, control, formState } = useForm<IProductRegisterInput>({
+    resolver: yupResolver(productRegisterSchema),
     mode: "onSubmit",
   });
 
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src =
-      "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=5c86c19d347c4caed39d146dad0a72a9";
-    document.head.appendChild(script);
-
-    script.onload = () => {
-      window.kakao.maps.load(function () {
-        const container = document.getElementById("map");
-        const options = {
-          center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-          level: 3,
-        };
-
-        const map = new window.kakao.maps.Map(container, options);
-
-        // 마커가 표시될 위치입니다
-        const markerPosition = new window.kakao.maps.LatLng(
-          33.450701,
-          126.570667
-        );
-
-        // 마커를 생성합니다
-        const marker = new window.kakao.maps.Marker({
-          position: markerPosition,
-        });
-
-        // 마커가 지도 위에 표시되도록 설정합니다
-        marker.setMap(map);
-      });
-    };
-  }, []);
-
   return (
     <>
-      {/* {props.isOpen && (
-        <S.AddressModal visible={true}>
-          <S.AddressSearchInput onComplete={props.onCompleteAddressSearch} />
-        </S.AddressModal>
-      )} */}
+      {props.toastHolder}
       <S.Wrapper>
         <S.TitleWrapper>
           <S.Title>상품등록</S.Title>
@@ -84,6 +50,9 @@ export default function ProductRegisterUI(props: IProps) {
                   />
                 )}
               />
+              <S.ErrorMessage>
+                {formState.errors.productName?.message}
+              </S.ErrorMessage>
             </S.InputWrapper>
             <S.InputWrapper width={"30%"}>
               <S.Label>가격</S.Label>
@@ -98,12 +67,13 @@ export default function ProductRegisterUI(props: IProps) {
                   />
                 )}
               />
+              <S.ErrorMessage>{formState.errors.price?.message}</S.ErrorMessage>
             </S.InputWrapper>
           </S.ProductNameWrapper>
           <S.InputWrapper>
             <S.Label>한줄요약</S.Label>
             <Controller
-              name="remark"
+              name="remarks"
               control={control}
               render={({ field: { onChange, value } }) => (
                 <S.InputField
@@ -113,7 +83,7 @@ export default function ProductRegisterUI(props: IProps) {
                 />
               )}
             />
-            {/* <S.Error>{props.titleError}</S.Error> */}
+            <S.ErrorMessage>{formState.errors.remarks?.message}</S.ErrorMessage>
           </S.InputWrapper>
           <S.InputWrapper>
             <S.Label>내용</S.Label>
@@ -123,18 +93,18 @@ export default function ProductRegisterUI(props: IProps) {
               render={({ field: { onChange, value } }) => (
                 <S.Contents
                   placeholder="내용을 작성해주세요."
-                  // value={value}
+                  value={value}
                   onChange={onChange}
                 />
               )}
             />
-
-            {/* <S.Error>{props.contentsError}</S.Error> */}
+            <S.ErrorMessage>
+              {formState.errors.contents?.message}
+            </S.ErrorMessage>
           </S.InputWrapper>
           <S.InputWrapper style={{ marginTop: "40px" }}>
             <S.Label>사진첨부 (3개까지 가능)</S.Label>
             <Upload
-              // action="/upload.do"
               listType="picture-card"
               maxCount={3}
               multiple
@@ -153,19 +123,13 @@ export default function ProductRegisterUI(props: IProps) {
               <S.InputWrapper>
                 <S.Label>주소</S.Label>
                 <Space>
-                  <S.InputField
-                    readOnly
-                    placeholder="02215"
-                    // value={}
-                  />
-                  {/* <S.SearchButton onClick={props.onClickAddressSearch}> */}
-                  <S.PostSearchButton>검색</S.PostSearchButton>
+                  <S.InputField readOnly value={props.addressInfo.zonecode} />
+                  <S.PostSearchButton onClick={props.onClickPostSearch}>
+                    검색
+                  </S.PostSearchButton>
                 </Space>
               </S.InputWrapper>
-              <S.InputField
-                readOnly
-                // value={}
-              />
+              <S.InputField readOnly value={props.addressInfo.address} />
               <Controller
                 name="address"
                 control={control}
@@ -177,8 +141,19 @@ export default function ProductRegisterUI(props: IProps) {
                   />
                 )}
               />
+              <S.ErrorMessage>
+                {formState.errors.address?.message}
+              </S.ErrorMessage>
             </Space>
-            <S.KakaoMap id="map" />
+            <KakaoMap
+              lat={33.55635}
+              lng={126.795841}
+              style={{
+                height: "190px",
+                aspectRatio: "1.8",
+                marginLeft: "50px",
+              }}
+            />
           </S.ZipcodeWrapper>
           <S.InputWrapper>
             <S.Label>태그</S.Label>
@@ -193,14 +168,15 @@ export default function ProductRegisterUI(props: IProps) {
                 />
               )}
             />
-            {/* <S.Error>{props.titleError}</S.Error> */}
           </S.InputWrapper>
-
           <S.SubmitWrapper>
             <S.SubmitButton
+              isActivedColor={
+                formState.isValid
+                  ? globalTheme.color.primary
+                  : globalTheme.text.disable
+              }
               htmlType="submit"
-              // onClick={props.isEdit ? props.onClickUpdate : props.onClickSubmit}
-              // isActive={props.isEdit ? true : props.isActive}
             >
               {/* {props.isEdit ? "수정하기" : "등록하기"} */}
               등록

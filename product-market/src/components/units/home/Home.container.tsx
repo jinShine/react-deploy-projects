@@ -1,4 +1,4 @@
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import {
   IQuery,
@@ -18,20 +18,15 @@ export default function Home() {
     Pick<IQuery, "fetchUseditemsOfTheBest">
   >(FETCH_USED_ITEMS_OF_BEST);
 
-  // const { data: usedItemsData, fetchMore, refetch } = useQuery<
-  //   Pick<IQuery, "fetchUseditems">,
-  //   IQueryFetchUseditemsArgs
-  // >(FETCH_USED_ITEMS);
-
-  const [fetchUsedItems, { data: usedItemsData, fetchMore }] = useLazyQuery<
-    Pick<IQuery, "fetchUseditems">,
-    IQueryFetchUseditemsArgs
-  >(FETCH_USED_ITEMS, {
-    variables: { isSoldout },
-  });
+  const {
+    data: usedItemsData,
+    fetchMore,
+    refetch,
+  } = useQuery<Pick<IQuery, "fetchUseditems">, IQueryFetchUseditemsArgs>(
+    FETCH_USED_ITEMS
+  );
 
   useEffect(() => {
-    fetchUsedItems();
     fetchUserInfo();
   }, []);
 
@@ -63,9 +58,7 @@ export default function Home() {
 
   const onChangeTab = (key: string) => {
     setIsSoldout(key !== "1");
-    fetchUsedItems({
-      variables: { isSoldout: key !== "1", search: "", page: 0 },
-    });
+    refetch({ isSoldout: key !== "1", search: "", page: 0 });
   };
 
   const onClickProductRegister = () => {
