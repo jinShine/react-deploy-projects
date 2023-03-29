@@ -1,22 +1,26 @@
 import { globalTheme } from "@/styles/theme/globalTheme";
 import { PlusOutlined } from "@ant-design/icons";
-import { Space, Upload } from "antd";
-import Head from "next/head";
+import { Space, Upload, UploadFile } from "antd";
+import { UploadChangeParam } from "antd/es/upload";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
 import * as S from "./Register.styles";
+import { IProductRegisterInput } from "./Register.types";
 
-interface IProductRegisterInput {
-  productName: string;
-  price: number;
+interface IProps {
+  onClickSubmit: (data: IProductRegisterInput) => void;
+  onChangeAttachedImage:
+    | ((info: UploadChangeParam<UploadFile<any>>) => void)
+    | undefined;
+  onPreviewAttachedImage: ((file: UploadFile<any>) => void) | undefined;
 }
 
 declare const window: typeof globalThis & {
   kakao: any;
 };
 
-export default function ProductRegisterUI() {
+export default function ProductRegisterUI(props: IProps) {
   const { handleSubmit, control, formState } = useForm<IProductRegisterInput>({
     mode: "onSubmit",
   });
@@ -36,7 +40,6 @@ export default function ProductRegisterUI() {
         };
 
         const map = new window.kakao.maps.Map(container, options);
-        console.log(map);
 
         // 마커가 표시될 위치입니다
         const markerPosition = new window.kakao.maps.LatLng(
@@ -66,7 +69,7 @@ export default function ProductRegisterUI() {
         <S.TitleWrapper>
           <S.Title>상품등록</S.Title>
         </S.TitleWrapper>
-        <S.FormWrapper>
+        <S.FormWrapper onSubmit={handleSubmit(props.onClickSubmit)}>
           <S.ProductNameWrapper>
             <S.InputWrapper width={"65%"}>
               <S.Label>상품명</S.Label>
@@ -114,17 +117,30 @@ export default function ProductRegisterUI() {
           </S.InputWrapper>
           <S.InputWrapper>
             <S.Label>내용</S.Label>
-            <S.Contents placeholder="내용을 작성해주세요." />
+            <Controller
+              name="contents"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <S.Contents
+                  placeholder="내용을 작성해주세요."
+                  // value={value}
+                  onChange={onChange}
+                />
+              )}
+            />
+
             {/* <S.Error>{props.contentsError}</S.Error> */}
           </S.InputWrapper>
           <S.InputWrapper style={{ marginTop: "40px" }}>
-            <S.Label>사진첨부</S.Label>
+            <S.Label>사진첨부 (3개까지 가능)</S.Label>
             <Upload
               // action="/upload.do"
               listType="picture-card"
               maxCount={3}
               multiple
               style={{ color: `${globalTheme.color.primary}` }}
+              onChange={props.onChangeAttachedImage}
+              onPreview={props.onPreviewAttachedImage}
             >
               <div>
                 <PlusOutlined />
@@ -182,8 +198,9 @@ export default function ProductRegisterUI() {
 
           <S.SubmitWrapper>
             <S.SubmitButton
-            // onClick={props.isEdit ? props.onClickUpdate : props.onClickSubmit}
-            // isActive={props.isEdit ? true : props.isActive}
+              htmlType="submit"
+              // onClick={props.isEdit ? props.onClickUpdate : props.onClickSubmit}
+              // isActive={props.isEdit ? true : props.isActive}
             >
               {/* {props.isEdit ? "수정하기" : "등록하기"} */}
               등록
