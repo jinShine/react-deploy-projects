@@ -16,5 +16,6 @@ export const useMoveToPage = () => {
   return {
     visitedPage,
     push,
+    query: router.query,
   };
 };

@@ -32,9 +32,6 @@ export default function ProductRegister() {
 
   const onClickSubmit = async (data: IProductRegisterInput) => {
     const contents = data.contents === "<p><br></p>" ? "" : data.contents;
-    console.log("### contents :", contents);
-
-    console.log("### INPUT :", data);
 
     try {
       await createUseditem({

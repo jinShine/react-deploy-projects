@@ -8,8 +8,8 @@ interface IProps {
 export const Tags = (props: IProps) => {
   return (
     <Wrapper size={[0, 0]} wrap={false}>
-      {props.data!.length > 0 ? (
-        props.data!.map((el, index) => (
+      {props.data?.length > 0 ? (
+        props.data?.map((el, index) => (
           <TagContent key={index}>{`#${el}`}</TagContent>
         ))
       ) : (
@@ -22,7 +22,6 @@ export const Tags = (props: IProps) => {
 const Wrapper = styled(Space)`
   margin-top: 16px;
   height: 13px;
-  width: 500px;
 `;
 
 const TagContent = styled(Tag)`
