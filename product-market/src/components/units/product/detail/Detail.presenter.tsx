@@ -19,9 +19,8 @@ export default function ProductDetailUI(props: IProps) {
       <S.CarouselWrapper autoplay>
         {useditem?.images && useditem.images.length > 0 ? (
           useditem.images?.map((url, index) => (
-            <div>
+            <div key={index}>
               <S.CarouselContent
-                key={index}
                 src={`${process.env.NEXT_PUBLIC_STORAGE_URI}/${url}`}
               />
             </div>
