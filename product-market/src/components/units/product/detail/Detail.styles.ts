@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60px 126px 126px 126px;
+  padding: 60px 126px 0 126px;
 `;
 
 export const CarouselWrapper = styled(Carousel)`

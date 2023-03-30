@@ -82,6 +82,7 @@ export default function ProductDetailUI(props: IProps) {
           borderRadius: 10,
         }}
       />
+      <Divider />
     </S.Wrapper>
   );
 }
