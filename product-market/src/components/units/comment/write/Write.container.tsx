@@ -7,6 +7,7 @@ import {
 } from "src/commons/types/graphql/types";
 import { useAuth } from "src/components/hooks/useAuth";
 import { useMoveToPage } from "src/components/hooks/useMoveToPage";
+import { FETCH_USED_ITEMS_QUESTIONS } from "../list/List.queries";
 import CommentWriteUI from "./Write.presenter";
 import { ICommentInput } from "./Write.types";
 import { CREATE_USEDITEM_QUESTION } from "./Writer.queries";
@@ -28,13 +29,19 @@ export default function CommentWrite() {
     if (!data.comment) return;
 
     try {
-      const result = await createUseditemQuestion({
+      await createUseditemQuestion({
         variables: {
           useditemId: query.useditemId,
           createUseditemQuestionInput: {
             contents: data.comment,
           },
         },
+        refetchQueries: [
+          {
+            query: FETCH_USED_ITEMS_QUESTIONS,
+            variables: { page: 0, useditemId: query.useditemId },
+          },
+        ],
       });
 
       useFormtReturn.setValue("comment", "");

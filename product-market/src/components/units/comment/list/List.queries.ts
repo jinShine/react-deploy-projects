@@ -11,6 +11,13 @@ export const FETCH_USED_ITEMS_QUESTIONS = gql`
         name
         picture
       }
+      createdAt
     }
+  }
+`;
+
+export const DELETE_USED_ITEM_QUESTIONS = gql`
+  mutation deleteUseditemQuestion($useditemQuestionId: ID!) {
+    deleteUseditemQuestion(useditemQuestionId: $useditemQuestionId)
   }
 `;

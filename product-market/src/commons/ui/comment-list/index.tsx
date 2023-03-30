@@ -1,16 +1,19 @@
-import { DeleteFilled, DeleteOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
+import { MouseEvent } from "react";
 import { IUseditemQuestion } from "src/commons/types/graphql/types";
 import { getDate } from "src/commons/utils/date";
+import { useAuth } from "src/components/hooks/useAuth";
 
 interface IProps {
   isEdit: boolean;
   commentData: IUseditemQuestion;
   onClickUpdate: () => void;
-  onClickDelete: () => void;
+  onClickDelete: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
 export default function CommentListItem(props: IProps) {
+  const { userInfo } = useAuth();
+
   return (
     <>
       {!props.isEdit && (
@@ -27,14 +30,23 @@ export default function CommentListItem(props: IProps) {
               <WriterWrapper>
                 <Writer>{props.commentData.user.name}</Writer>
               </WriterWrapper>
+              <CreatedAt>{getDate(props.commentData.createdAt)}</CreatedAt>
               <Contents>{props.commentData.contents}</Contents>
             </MainWrapper>
-            <OptionWrapper>
-              <DeleteFilled onClick={props.onClickUpdate} />
-              <DeleteOutlined onClick={props.onClickDelete} />
-            </OptionWrapper>
+            {userInfo?.email === props.commentData.user.email && (
+              <OptionWrapper>
+                <UpdateIcon
+                  src="/images/ic-pencil.svg"
+                  onClick={props.onClickUpdate}
+                />
+                <DeleteIcon
+                  id={props.commentData._id}
+                  src="/images/ic-delete.svg"
+                  onClick={props.onClickDelete}
+                />
+              </OptionWrapper>
+            )}
           </FlexWrapper>
-          <DateString>{getDate(props.commentData.createdAt)}</DateString>
           <Divider />
         </Wrapper>
       )}
@@ -50,19 +62,19 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  height: 128px;
+  min-height: 100px;
 `;
 
 const Divider = styled.div`
   background-color: ${(props) => props.theme.color.divider};
   height: 1px;
   width: 100%;
-  margin: 10px 0;
 `;
 
 export const FlexWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  padding: 14px 0px;
 `;
 
 export const UserWrapper = styled.div`
@@ -73,19 +85,8 @@ export const UserWrapper = styled.div`
 `;
 
 export const UserImage = styled.img`
-  height: 40px;
+  height: 32px;
   aspect-ratio: 1;
-`;
-
-export const UserName = styled.span`
-  font-size: 15px;
-  color: ${(props) => props.theme.text.secondary};
-  margin-left: 6px;
-`;
-
-export const Avatar = styled.img`
-  width: 48px;
-  height: 48px;
 `;
 
 export const MainWrapper = styled.div`
@@ -98,28 +99,39 @@ export const WriterWrapper = styled.div`
   align-items: center;
 `;
 export const Writer = styled.div`
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 12px;
+  font-weight: 700;
 `;
-export const Contents = styled.div``;
+
+export const CreatedAt = styled.div`
+  font-size: 10px;
+  font-weight: 300;
+  color: ${(props) => props.theme.text.tertiary};
+  padding-top: 4px;
+`;
+
+export const Contents = styled.div`
+  font-size: 14px;
+  font-weight: 400;
+  color: ${(props) => props.theme.text.primary};
+  padding: 16px 50px 1px 0;
+`;
 
 export const OptionWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 46px;
 `;
+
 export const UpdateIcon = styled.img`
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   cursor: pointer;
 `;
 export const DeleteIcon = styled.img`
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   cursor: pointer;
-`;
-
-export const DateString = styled.div`
-  color: lightgray;
-  padding-top: 15px;
-  padding-left: 60px;
 `;

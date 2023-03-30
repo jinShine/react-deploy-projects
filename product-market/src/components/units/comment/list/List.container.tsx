@@ -1,11 +1,18 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+import { Modal } from "antd";
+import { MouseEvent } from "react";
 import {
+  IMutation,
+  IMutationDeleteUseditemQuestionArgs,
   IQuery,
   IQueryFetchUseditemQuestionsArgs,
 } from "src/commons/types/graphql/types";
 import { useMoveToPage } from "src/components/hooks/useMoveToPage";
 import CommentListUI from "./List.presenter";
-import { FETCH_USED_ITEMS_QUESTIONS } from "./List.queries";
+import {
+  DELETE_USED_ITEM_QUESTIONS,
+  FETCH_USED_ITEMS_QUESTIONS,
+} from "./List.queries";
 
 export default function CommentList() {
   const { push, query } = useMoveToPage();
@@ -16,6 +23,11 @@ export default function CommentList() {
   >(FETCH_USED_ITEMS_QUESTIONS, {
     variables: { page: 0, useditemId: query.useditemId },
   });
+
+  const [deleteUseditemQuestions] = useMutation<
+    Pick<IMutation, "deleteUseditemQuestion">,
+    IMutationDeleteUseditemQuestionArgs
+  >(DELETE_USED_ITEM_QUESTIONS);
 
   const onLoadMore = () => {
     if (!commentDatas) return;
@@ -39,9 +51,27 @@ export default function CommentList() {
     });
   };
 
-  const onClickUpdate = () => {};
+  const onClickUpdate = () => {
+    console.log("Update");
+  };
 
-  const onClickDelete = () => {};
+  const onClickDelete = async (event: MouseEvent<HTMLDivElement>) => {
+    const useditemQuestionId = event.currentTarget.id;
+
+    try {
+      await deleteUseditemQuestions({
+        variables: { useditemQuestionId },
+        refetchQueries: [
+          {
+            query: FETCH_USED_ITEMS_QUESTIONS,
+            variables: { page: 0, useditemId: query.useditemId },
+          },
+        ],
+      });
+    } catch (error) {
+      Modal.error({ content: (error as Error).message });
+    }
+  };
 
   return (
     <CommentListUI

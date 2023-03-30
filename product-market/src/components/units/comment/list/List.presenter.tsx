@@ -7,7 +7,7 @@ interface ICommonListUIProps {
   commentDatas?: Pick<IQuery, "fetchUseditemQuestions">;
   onLoadMore: (page: number) => void;
   onClickUpdate: () => void;
-  onClickDelete: () => void;
+  onClickDelete: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
 export default function CommentListUI(props: ICommonListUIProps) {

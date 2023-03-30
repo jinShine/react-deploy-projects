@@ -144,7 +144,7 @@ export const Contents = styled.div`
   color: ${(props) => props.theme.text.secondary};
   margin-top: 40px;
   width: 100%;
-  min-height: 300px;
+  min-height: 150px;
 `;
 
 export const LocationTitle = styled.div`

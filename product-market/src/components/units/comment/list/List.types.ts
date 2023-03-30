@@ -1,3 +1,4 @@
+import { MouseEvent } from "react";
 import { IQuery } from "./../../../../commons/types/graphql/types";
 
 export interface ICommentUIProps {
@@ -7,5 +8,5 @@ export interface ICommentUIProps {
   onLoadMore: (page: number) => void;
   hasMore?: boolean;
   onClickUpdate: () => void;
-  onClickDelete: () => void;
+  onClickDelete: (event: MouseEvent<HTMLDivElement>) => void;
 }
