@@ -141,7 +141,7 @@ export const Price = styled.h1`
 export const Contents = styled.div`
   font-size: 15px;
   font-weight: 500;
-  color: ${(props) => props.theme.text.secondary};
+  color: ${(props) => props.theme.text.primary};
   margin-top: 40px;
   width: 100%;
   min-height: 150px;
@@ -153,4 +153,11 @@ export const LocationTitle = styled.div`
   width: 100%;
   padding-top: 10px;
   padding-bottom: 20px;
+`;
+
+export const LocationAddress = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${(props) => props.theme.text.tertiary};
+  margin-top: 12px;
 `;

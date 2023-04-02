@@ -9,6 +9,7 @@ import { onError } from "@apollo/client/link/error";
 import { createUploadLink } from "apollo-upload-client";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
+import { useAuth } from "src/components/hooks/useAuth";
 import { accessTokenState } from "../store";
 import { updateAccessToken } from "../utils/updateAccessToken";
 
@@ -21,11 +22,11 @@ const cache = new InMemoryCache();
 export default function ApolloSetting(props: IApolloSettingProps) {
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
 
-  useEffect(() => {
-    void updateAccessToken().then((newAccessToken) => {
-      setAccessToken(newAccessToken);
-    });
-  }, []);
+  // useEffect(() => {
+  //   void updateAccessToken().then((newAccessToken) => {
+  //     setAccessToken(newAccessToken);
+  //   });
+  // }, []);
 
   const errorLink = onError(({ graphQLErrors, operation, forward }) => {
     if (graphQLErrors) {

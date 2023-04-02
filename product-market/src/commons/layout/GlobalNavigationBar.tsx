@@ -5,7 +5,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import styled from "@emotion/styled";
-import { Button } from "antd";
+import { Button, Space } from "antd";
 import { useAuth } from "src/components/hooks/useAuth";
 import { useMoveToPage } from "src/components/hooks/useMoveToPage";
 import { useToast } from "src/components/hooks/useToast";
@@ -42,7 +42,7 @@ export default function GlobalNavigationBar() {
     <Wrapper>
       {toastHolder}
       <LogoWrapper onClick={() => push("/")}>Logo</LogoWrapper>
-      <IconWrapper>
+      <Space>
         {isLoggedIn ? (
           <PopoverView content={content} trigger="click">
             <>
@@ -52,14 +52,14 @@ export default function GlobalNavigationBar() {
             </>
           </PopoverView>
         ) : (
-          <IconTitle title={`로그인`} onClick={() => push("/login/email")}>
+          <IconTitle title="로그인" onClick={() => push("/login/email")}>
             <UserOutlined />
           </IconTitle>
         )}
         <IconTitle title="장바구니" count={0}>
           <ShoppingCartOutlined />
         </IconTitle>
-      </IconWrapper>
+      </Space>
     </Wrapper>
   );
 }
@@ -79,13 +79,6 @@ const Wrapper = styled.div`
 `;
 
 const LogoWrapper = styled.div``;
-
-const IconWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-`;
 
 const PopOverWrapper = styled.div`
   display: flex;

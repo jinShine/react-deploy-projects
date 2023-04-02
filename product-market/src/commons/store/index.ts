@@ -9,9 +9,15 @@ export const visitedPageState = atom({
   default: "",
 });
 
-export const accessTokenState = atom<string>({
+export const accessTokenState = atom<string | null>({
   key: `accessTokenState`,
-  default: undefined,
+  default: null,
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const isLoggedInState = atom<boolean>({
+  key: `isLoggedInState`,
+  default: false,
   effects_UNSTABLE: [persistAtom],
 });
 

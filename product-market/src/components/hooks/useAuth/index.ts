@@ -1,7 +1,11 @@
 import { useApolloClient, useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { accessTokenState, useInfoState } from "src/commons/store";
+import {
+  accessTokenState,
+  isLoggedInState,
+  useInfoState,
+} from "src/commons/store";
 import {
   IMutation,
   IMutationCreateUserArgs,
@@ -23,13 +27,9 @@ export interface AuthCompletion {
 export const useAuth = () => {
   const client = useApolloClient();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
   const [userInfo, setUserInfo] = useRecoilState(useInfoState);
-
-  useEffect(() => {
-    setIsLoggedIn(accessToken !== "");
-  }, [accessToken]);
 
   const [loginUser] = useMutation<
     Pick<IMutation, "loginUser">,
@@ -92,6 +92,9 @@ export const useAuth = () => {
       }
 
       setAccessToken(accessTokenData);
+      setIsLoggedIn(true);
+      fetchUserInfo();
+
       return { success: true };
     } catch (error) {
       return {
@@ -102,20 +105,23 @@ export const useAuth = () => {
   };
 
   const fetchUserInfo = async () => {
-    const result = await client.query({
-      query: FETCH_USER_LOGGED_IN,
-    });
-    const { name, email, picture } = result.data.fetchUserLoggedIn;
+    if (isLoggedIn) {
+      const result = await client.query({
+        query: FETCH_USER_LOGGED_IN,
+      });
+      const { name, email, picture } = result.data.fetchUserLoggedIn;
 
-    setUserInfo({ name, email, picture });
+      setUserInfo({ name, email, picture });
+    }
   };
 
-  const logout = async () => {
+  const logout = () => {
     clear();
   };
 
   const clear = () => {
-    setAccessToken("");
+    setAccessToken(null);
+    setIsLoggedIn(false);
     setUserInfo(null);
   };
 

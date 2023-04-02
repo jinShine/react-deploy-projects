@@ -5,7 +5,6 @@ export interface ICommentInput {
 }
 
 export interface ICommentWriteUIProps {
-  isLoggedIn: boolean;
   useForm: UseFormReturn<ICommentInput, any>;
   onClickSubmit: (data: ICommentInput) => void;
 }

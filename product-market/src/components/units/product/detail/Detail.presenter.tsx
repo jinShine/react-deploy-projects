@@ -1,10 +1,10 @@
-import { globalTheme } from "@/styles/theme/globalTheme";
-import { EnvironmentOutlined } from "@ant-design/icons";
-import { Divider, Space, Tooltip } from "antd";
+import { Divider, Tag, Tooltip } from "antd";
+import DOMPurify from "dompurify";
 import { IQuery } from "src/commons/types/graphql/types";
 import { EmptyImage } from "src/commons/ui/empty-image";
 import { KakaoMap } from "src/commons/ui/kakao-map";
 import { Tags } from "src/commons/ui/tag-list";
+import { getDate } from "src/commons/utils/date";
 import * as S from "./Detail.styles";
 
 interface IProps {
@@ -17,12 +17,16 @@ export default function ProductDetailUI(props: IProps) {
   return (
     <S.Wrapper>
       <S.CarouselWrapper autoplay>
-        {useditem?.images && useditem.images.length > 0 ? (
+        {useditem?.images && useditem?.images?.every((img) => img !== "") ? (
           useditem.images?.map((url, index) => (
             <div key={index}>
-              <S.CarouselContent
-                src={`${process.env.NEXT_PUBLIC_STORAGE_URI}/${url}`}
-              />
+              {url ? (
+                <S.CarouselContent
+                  src={`${process.env.NEXT_PUBLIC_STORAGE_URI}/${url}`}
+                />
+              ) : (
+                <EmptyImage height={500} width={700} />
+              )}
             </div>
           ))
         ) : (
@@ -40,7 +44,7 @@ export default function ProductDetailUI(props: IProps) {
           />
           <S.SellerName>{useditem?.seller?.name ?? "판매자"}</S.SellerName>
         </S.SellerWrapper>
-        {useditem?.useditemAddress && (
+        {useditem?.useditemAddress?.address && (
           <Tooltip
             placement="leftTop"
             title={`${useditem.useditemAddress.address}\n${useditem.useditemAddress.addressDetail}`}
@@ -49,11 +53,10 @@ export default function ProductDetailUI(props: IProps) {
               whiteSpace: "pre-wrap",
             }}
           >
-            <EnvironmentOutlined style={{ color: globalTheme.color.primary }} />
+            <Tag color="default">위치</Tag>
           </Tooltip>
         )}
       </S.ProfileWrapper>
-      <S.Divider />
       <S.ProductInfoWrapper>
         <S.Remarks>{useditem?.remarks}</S.Remarks>
         <S.TitleWrapper>
@@ -63,24 +66,33 @@ export default function ProductDetailUI(props: IProps) {
             <S.PickCount>{useditem?.pickedCount ?? 0}</S.PickCount>
           </S.PickWrapper>
         </S.TitleWrapper>
-        <S.CreatedAt>{useditem?.createdAt}</S.CreatedAt>
+        <S.CreatedAt>{getDate(useditem?.createdAt)}</S.CreatedAt>
         <S.TagWrapper>
           <Tags data={useditem?.tags} />
         </S.TagWrapper>
         <S.Price>{`${useditem?.price?.toLocaleString()}원`}</S.Price>
-        <S.Contents>{useditem?.contents}</S.Contents>
+        {typeof window !== "undefined" && (
+          <S.Contents
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(useditem?.contents ?? ""),
+            }}
+          />
+        )}
         <Divider />
       </S.ProductInfoWrapper>
       <S.LocationTitle>여기서 거래 원해요 👋🏻</S.LocationTitle>
       <KakaoMap
-        lat={useditem?.useditemAddress?.lat ?? 33.55635}
-        lng={useditem?.useditemAddress?.lng ?? 126.795841}
+        address={useditem?.useditemAddress?.address}
         style={{
           width: "700px",
           height: "400px",
           borderRadius: 10,
         }}
       />
+      <S.LocationAddress>{`${useditem?.useditemAddress?.address ?? ""} ${
+        useditem?.useditemAddress?.addressDetail ?? ""
+      }`}</S.LocationAddress>
+
       <Divider />
     </S.Wrapper>
   );

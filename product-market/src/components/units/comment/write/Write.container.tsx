@@ -14,7 +14,6 @@ import { CREATE_USEDITEM_QUESTION } from "./Writer.queries";
 
 export default function CommentWrite() {
   const { push, query } = useMoveToPage();
-  const { isLoggedIn } = useAuth();
 
   const useFormtReturn = useForm<ICommentInput>({
     mode: "onSubmit",
@@ -51,10 +50,6 @@ export default function CommentWrite() {
   };
 
   return (
-    <CommentWriteUI
-      isLoggedIn={isLoggedIn}
-      useForm={useFormtReturn}
-      onClickSubmit={onClickSubmit}
-    />
+    <CommentWriteUI useForm={useFormtReturn} onClickSubmit={onClickSubmit} />
   );
 }

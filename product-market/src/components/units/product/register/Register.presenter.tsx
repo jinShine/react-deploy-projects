@@ -121,7 +121,7 @@ export default function ProductRegisterUI(props: IProps) {
           <S.ZipcodeWrapper>
             <Space direction="vertical" style={{ flexGrow: 1 }}>
               <S.InputWrapper>
-                <S.Label>주소</S.Label>
+                <S.Label>거래장소</S.Label>
                 <Space>
                   <S.InputField readOnly value={props.addressInfo.zonecode} />
                   <S.PostSearchButton onClick={props.onClickPostSearch}>
@@ -146,12 +146,12 @@ export default function ProductRegisterUI(props: IProps) {
               </S.ErrorMessage>
             </Space>
             <KakaoMap
-              lat={33.55635}
-              lng={126.795841}
+              address={props.addressInfo.address}
               style={{
                 height: "190px",
                 aspectRatio: "1.8",
                 marginLeft: "50px",
+                visibility: props.addressInfo.address === null ? "hidden" : "",
               }}
             />
           </S.ZipcodeWrapper>
