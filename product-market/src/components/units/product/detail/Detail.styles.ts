@@ -145,6 +145,7 @@ export const Contents = styled.div`
   margin-top: 40px;
   width: 100%;
   min-height: 150px;
+  border: none;
 `;
 
 export const LocationTitle = styled.div`

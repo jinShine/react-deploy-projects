@@ -9,6 +9,7 @@ import * as S from "./Detail.styles";
 
 interface IProps {
   useditem: Pick<IQuery, "fetchUseditem"> | undefined;
+  onClickPick: () => void;
 }
 
 export default function ProductDetailUI(props: IProps) {
@@ -62,7 +63,10 @@ export default function ProductDetailUI(props: IProps) {
         <S.TitleWrapper>
           <S.Title>{useditem?.name}</S.Title>
           <S.PickWrapper>
-            <S.PickImage src="/images/ic-heart.svg" />
+            <S.PickImage
+              src="/images/ic-heart.svg"
+              onClick={props.onClickPick}
+            />
             <S.PickCount>{useditem?.pickedCount ?? 0}</S.PickCount>
           </S.PickWrapper>
         </S.TitleWrapper>
