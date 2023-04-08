@@ -1,22 +1,40 @@
-import { Divider, Tag, Tooltip } from "antd";
+import { globalTheme } from "@/styles/theme/globalTheme";
+import { EditOutlined } from "@ant-design/icons";
+import { ConfigProvider, Divider, FloatButton, Tag, Tooltip } from "antd";
 import DOMPurify from "dompurify";
 import { IQuery } from "src/commons/types/graphql/types";
 import { EmptyImage } from "src/commons/ui/empty-image";
 import { KakaoMap } from "src/commons/ui/kakao-map";
 import { Tags } from "src/commons/ui/tag-list";
 import { getDate } from "src/commons/utils/date";
+import { useAuth } from "src/components/hooks/useAuth";
 import * as S from "./Detail.styles";
 
 interface IProps {
   useditem: Pick<IQuery, "fetchUseditem"> | undefined;
   onClickPick: () => void;
+  onClickProductEdit: () => void;
 }
 
 export default function ProductDetailUI(props: IProps) {
+  const { userInfo } = useAuth();
   const useditem = props.useditem?.fetchUseditem;
 
   return (
     <S.Wrapper>
+      {userInfo?.email === useditem?.seller?.email && (
+        <ConfigProvider
+          theme={{ token: { colorPrimary: `${globalTheme.text.primary}` } }}
+        >
+          <FloatButton
+            type="primary"
+            icon={<EditOutlined />}
+            tooltip={<div>수정하기</div>}
+            style={{ right: 35, width: 50, height: 50 }}
+            onClick={props.onClickProductEdit}
+          />
+        </ConfigProvider>
+      )}
       <S.CarouselWrapper autoplay>
         {useditem?.images && useditem?.images?.every((img) => img !== "") ? (
           useditem.images?.map((url, index) => (
@@ -96,7 +114,6 @@ export default function ProductDetailUI(props: IProps) {
       <S.LocationAddress>{`${useditem?.useditemAddress?.address ?? ""} ${
         useditem?.useditemAddress?.addressDetail ?? ""
       }`}</S.LocationAddress>
-
       <Divider />
     </S.Wrapper>
   );

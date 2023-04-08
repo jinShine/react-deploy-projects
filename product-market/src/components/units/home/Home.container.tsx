@@ -13,6 +13,11 @@ export default function Home() {
   const { push } = useMoveToPage();
   const { isLoggedIn, fetchUserInfo } = useAuth();
   const [isSoldout, setIsSoldout] = useState(false);
+  const [keyword, setKeyword] = useState("");
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
 
   const { data: itemsOfBestData } = useQuery<
     Pick<IQuery, "fetchUseditemsOfTheBest">
@@ -26,10 +31,6 @@ export default function Home() {
     FETCH_USED_ITEMS
   );
 
-  useEffect(() => {
-    fetchUserInfo();
-  }, []);
-
   const onLoadMore = async (page: number) => {
     if (!usedItemsData) return;
 
@@ -37,11 +38,8 @@ export default function Home() {
       Math.ceil((usedItemsData.fetchUseditems.length ?? 10) / 10) + 1;
 
     await fetchMore({
-      variables: { isSoldout, search: "", page: nextPage },
+      variables: { isSoldout, search: keyword, page: nextPage },
       updateQuery: (prev, { fetchMoreResult }) => {
-        console.log("######### 1:", prev);
-        console.log("######### 2:", fetchMoreResult);
-
         if (fetchMoreResult.fetchUseditems === undefined) {
           return { fetchUseditems: [...prev.fetchUseditems] };
         }
@@ -58,7 +56,7 @@ export default function Home() {
 
   const onChangeTab = (key: string) => {
     setIsSoldout(key !== "1");
-    refetch({ isSoldout: key !== "1", search: "", page: 0 });
+    refetch({ isSoldout: key !== "1", search: keyword, page: 0 });
   };
 
   const onClickProductRegister = () => {
@@ -73,6 +71,11 @@ export default function Home() {
     push(`/product/${event.currentTarget.id}`);
   };
 
+  const onChangeSearchbar = (value: string) => {
+    setKeyword(value);
+    refetch({ isSoldout: isSoldout, search: value, page: 0 });
+  };
+
   return (
     <HomeUI
       itemsOfBestDatas={itemsOfBestData}
@@ -83,6 +86,7 @@ export default function Home() {
       onChangeTab={onChangeTab}
       onClickProductRegister={onClickProductRegister}
       onClickItem={onClickItem}
+      onChangeSearchbar={onChangeSearchbar}
     />
   );
 }

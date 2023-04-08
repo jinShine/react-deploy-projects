@@ -1,5 +1,4 @@
 import { useApolloClient, useMutation } from "@apollo/client";
-import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import {
   accessTokenState,
@@ -93,7 +92,6 @@ export const useAuth = () => {
 
       setAccessToken(accessTokenData);
       setIsLoggedIn(true);
-      fetchUserInfo();
 
       return { success: true };
     } catch (error) {

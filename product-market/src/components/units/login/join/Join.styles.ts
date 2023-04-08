@@ -27,6 +27,14 @@ export const FormWrapper = styled.form`
   align-items: stretch;
 `;
 
+export const ProfileUploaderWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+`;
+
 export const InputField = styled(Input)`
   height: 46px;
   margin-top: 6px;

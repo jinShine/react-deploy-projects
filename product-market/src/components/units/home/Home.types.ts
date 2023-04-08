@@ -11,4 +11,5 @@ export interface IHomeUIProps {
   onChangeTab: (key: string) => void;
   onClickProductRegister: () => void;
   onClickItem: (event: MouseEvent<HTMLDivElement>) => void;
+  onChangeSearchbar: (value: string) => void;
 }

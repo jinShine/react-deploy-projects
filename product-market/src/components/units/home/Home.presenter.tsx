@@ -7,6 +7,7 @@ import { ItemCard } from "src/commons/ui/item-card";
 import { HomeItemList } from "./Home.infiniteUI";
 import * as S from "./Home.styles";
 import { IHomeUIProps } from "./Home.types";
+import SearchBar from "src/commons/ui/searchBar";
 
 export default function HomeUI(props: IHomeUIProps) {
   const items: TabsProps["items"] = [
@@ -89,6 +90,9 @@ export default function HomeUI(props: IHomeUIProps) {
           </S.ItemsWrapper>
         </S.BestItemsWrapper>
         <S.ProductWrapper>
+          <S.SearchBarWrapper>
+            <SearchBar onChangeSearchbar={props.onChangeSearchbar} />
+          </S.SearchBarWrapper>
           <Tabs
             defaultActiveKey="1"
             items={items}

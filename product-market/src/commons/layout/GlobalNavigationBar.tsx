@@ -28,6 +28,14 @@ export default function GlobalNavigationBar() {
       <PopOverTitle>{userInfo ? `${userInfo.name}님` : "로그인"}</PopOverTitle>
       <PopOverPoint>100,000P</PopOverPoint>
       <Divider />
+      <Button
+        type="text"
+        icon={<UserOutlined />}
+        onClick={() => push("/mypage")}
+      >
+        마이페이지
+      </Button>
+      <Divider />
       <Button type="text" icon={<DollarOutlined />}>
         충전하기
       </Button>

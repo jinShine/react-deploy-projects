@@ -1,18 +1,29 @@
 import { globalTheme } from "@/styles/theme/globalTheme";
 import { PlusOutlined } from "@ant-design/icons";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Space, Upload, UploadFile } from "antd";
+import { Space, Upload } from "antd";
 import { UploadChangeParam } from "antd/es/upload";
-import { JSXElementConstructor, ReactElement } from "react";
+import type { UploadFile } from "antd/es/upload/interface";
+import {
+  JSXElementConstructor,
+  ReactElement,
+  useEffect,
+  useState,
+} from "react";
 import { Controller, useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
+import { IQuery } from "src/commons/types/graphql/types";
 import { KakaoMap } from "src/commons/ui/kakao-map";
 import { AddressInfo } from "src/components/hooks/usePostcode";
 import * as S from "./Register.styles";
 import { IProductRegisterInput, productRegisterSchema } from "./Register.types";
 
 interface IProps {
+  isEdit: boolean;
+  useditemData?: Pick<IQuery, "fetchUseditem">;
+  newFileList: () => UploadFile<any>[];
   onClickSubmit: (data: IProductRegisterInput) => void;
+  onClickUpdate: (data: IProductRegisterInput) => void;
   onChangeAttachedImage:
     | ((info: UploadChangeParam<UploadFile<any>>) => void)
     | undefined;
@@ -23,19 +34,43 @@ interface IProps {
 }
 
 export default function ProductRegisterUI(props: IProps) {
-  const { handleSubmit, control, formState } = useForm<IProductRegisterInput>({
-    resolver: yupResolver(productRegisterSchema),
-    mode: "onSubmit",
-  });
+  const useditemData = props.useditemData?.fetchUseditem;
+
+  const { handleSubmit, control, formState, reset } =
+    useForm<IProductRegisterInput>({
+      resolver: yupResolver(productRegisterSchema),
+      mode: "onSubmit",
+    });
+
+  const [fileList, setFileList] = useState<UploadFile[]>(props.newFileList);
+
+  useEffect(() => {
+    reset({
+      productName: useditemData?.name ?? "",
+      price: Number(useditemData?.price ?? 0),
+      remarks: useditemData?.remarks ?? "",
+      contents: useditemData?.contents,
+      images: useditemData?.images,
+      addressDetail: useditemData?.useditemAddress?.addressDetail ?? "",
+      tags: useditemData?.tags?.toString(),
+    });
+    setFileList(props.newFileList);
+  }, [useditemData]);
 
   return (
     <>
       {props.toastHolder}
       <S.Wrapper>
         <S.TitleWrapper>
-          <S.Title>상품등록</S.Title>
+          <S.Title>{props.isEdit ? "상품수정" : "상품등록"}</S.Title>
         </S.TitleWrapper>
-        <S.FormWrapper onSubmit={handleSubmit(props.onClickSubmit)}>
+        <S.FormWrapper
+          onSubmit={
+            props.isEdit
+              ? handleSubmit(props.onClickUpdate)
+              : handleSubmit(props.onClickSubmit)
+          }
+        >
           <S.ProductNameWrapper>
             <S.InputWrapper width={"65%"}>
               <S.Label>상품명</S.Label>
@@ -111,6 +146,7 @@ export default function ProductRegisterUI(props: IProps) {
               style={{ color: `${globalTheme.color.primary}` }}
               onChange={props.onChangeAttachedImage}
               onPreview={props.onPreviewAttachedImage}
+              defaultFileList={fileList}
             >
               <div>
                 <PlusOutlined />
@@ -123,15 +159,28 @@ export default function ProductRegisterUI(props: IProps) {
               <S.InputWrapper>
                 <S.Label>거래장소</S.Label>
                 <Space>
-                  <S.InputField readOnly value={props.addressInfo.zonecode} />
+                  <S.InputField
+                    readOnly
+                    value={
+                      props.addressInfo.zonecode ??
+                      useditemData?.useditemAddress?.zipcode
+                    }
+                  />
                   <S.PostSearchButton onClick={props.onClickPostSearch}>
                     검색
                   </S.PostSearchButton>
                 </Space>
               </S.InputWrapper>
-              <S.InputField readOnly value={props.addressInfo.address} />
+              <S.InputField
+                readOnly
+                value={
+                  props.addressInfo.address ??
+                  useditemData?.useditemAddress?.address
+                }
+              />
+
               <Controller
-                name="address"
+                name="addressDetail"
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <S.InputField
@@ -142,16 +191,22 @@ export default function ProductRegisterUI(props: IProps) {
                 )}
               />
               <S.ErrorMessage>
-                {formState.errors.address?.message}
+                {formState.errors.addressDetail?.message}
               </S.ErrorMessage>
             </Space>
             <KakaoMap
-              address={props.addressInfo.address}
+              address={
+                props.addressInfo.address ??
+                useditemData?.useditemAddress?.address
+              }
               style={{
                 height: "190px",
                 aspectRatio: "1.8",
                 marginLeft: "50px",
-                visibility: props.addressInfo.address === null ? "hidden" : "",
+                visibility:
+                  useditemData?.useditemAddress?.address === null
+                    ? "hidden"
+                    : "",
               }}
             />
           </S.ZipcodeWrapper>
@@ -178,8 +233,7 @@ export default function ProductRegisterUI(props: IProps) {
               }
               htmlType="submit"
             >
-              {/* {props.isEdit ? "수정하기" : "등록하기"} */}
-              등록
+              {props.isEdit ? "수정" : "등록"}
             </S.SubmitButton>
           </S.SubmitWrapper>
         </S.FormWrapper>

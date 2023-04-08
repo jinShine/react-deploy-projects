@@ -1,5 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
+import ProfileUploader from "src/commons/ui/uploads";
 import * as S from "./Join.styles";
 import { IJoinFormInput, joinSchema } from "./Join.types";
 
@@ -20,6 +21,9 @@ export default function JoinUI(props: IProps) {
         <S.Title>회원가입</S.Title>
       </S.TitleWrapper>
       <S.FormWrapper onSubmit={handleSubmit(props.onClickSubmit)}>
+        {/* <S.ProfileUploaderWrapper>
+          <ProfileUploader width={150} height={150} setFile={props.setFile} />
+        </S.ProfileUploaderWrapper> */}
         <Controller
           name="name"
           control={control}

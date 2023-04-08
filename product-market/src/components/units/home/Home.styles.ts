@@ -49,3 +49,8 @@ export const SelectedTab = styled.span`
   font-weight: 500;
   color: ${(props) => props.theme.color.primary};
 `;
+
+export const SearchBarWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;

@@ -3,6 +3,7 @@ import { useMoveToPage } from "src/components/hooks/useMoveToPage";
 import { useToast } from "src/components/hooks/useToast";
 import JoinUI from "./Join.presenter";
 import { IJoinFormInput } from "./Join.types";
+import { useState } from "react";
 
 export default function Join() {
   const { push } = useMoveToPage();
@@ -15,7 +16,7 @@ export default function Join() {
     join(data.name, data.email, data.password).then((result) => {
       if (result.success) {
         toast.success(result.message);
-        void push("/login/email", 2);
+        void push("/login/email", 1.5);
       } else {
         toast.error(result.message);
       }

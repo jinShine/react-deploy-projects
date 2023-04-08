@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { Modal } from "antd";
-import { useEffect, useState } from "react";
 import {
   IMutation,
   IMutationToggleUseditemPickArgs,
@@ -43,5 +42,15 @@ export default function ProductDetail() {
     }
   };
 
-  return <ProductDetailUI useditem={useditem} onClickPick={onClickPick} />;
+  const onClickProductEdit = () => {
+    push(`/product/${query.useditemId}/edit`);
+  };
+
+  return (
+    <ProductDetailUI
+      useditem={useditem}
+      onClickPick={onClickPick}
+      onClickProductEdit={onClickProductEdit}
+    />
+  );
 }
