@@ -11,11 +11,9 @@ export default function Setting() {
   const onClickItem = (event: SyntheticEvent) => {
     switch (Number(event.currentTarget.id)) {
       case SettingData.modifyUserInfo:
-        console.log("회원 정보 수정");
-        push("/");
+        push("/mypage/modify");
         break;
       case SettingData.logout:
-        console.log("로그아웃");
         logout();
         push("/");
         break;

@@ -4,9 +4,10 @@ import { SyntheticEvent } from "react";
 import { SettingData } from "src/components/units/mypage/setting/Setting.types";
 
 interface IProps {
-  settingData: SettingData;
+  settingData?: SettingData;
   title: string;
   showIndicator?: boolean;
+  showDivider?: boolean;
   onClick: (event: SyntheticEvent) => void;
 }
 
@@ -17,7 +18,7 @@ export default function SettingItem(props: IProps) {
         <Label>{props.title}</Label>
         {props.showIndicator && <IndicatorImage />}
       </Wrapper>
-      <Divider />
+      {props.showDivider && <Divider />}
     </>
   );
 }

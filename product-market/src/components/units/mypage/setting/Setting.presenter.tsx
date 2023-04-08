@@ -18,6 +18,7 @@ export default function SettingUI(props: IProps) {
           settingData={SettingData.modifyUserInfo}
           title="회원 정보 수정"
           showIndicator={true}
+          showDivider={true}
           onClick={props.onClickItem}
         />
         <SettingItem
