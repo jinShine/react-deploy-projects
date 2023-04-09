@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
+import { MouseEvent } from "react";
 import MyPageUserInfo from "src/commons/ui/mypage-userinfo";
 
 interface IProps {
+  onClickModifyProfile: (event: MouseEvent) => void;
   onClickSetting: (event: MouseEvent) => void;
 }
 
@@ -9,9 +11,12 @@ export default function MyPageUI(props: IProps) {
   return (
     <Wrapper>
       <TitleWrapper>
-        <Title>회원가입</Title>
+        <Title>마이페이지</Title>
       </TitleWrapper>
-      <MyPageUserInfo onClickSetting={props.onClickSetting} />
+      <MyPageUserInfo
+        onClickModifyProfile={props.onClickModifyProfile}
+        onClickSetting={props.onClickSetting}
+      />
     </Wrapper>
   );
 }

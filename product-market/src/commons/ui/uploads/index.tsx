@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { checkValidationImage } from "./checkValidationImage";
 
 interface IProps {
@@ -12,6 +12,10 @@ interface IProps {
 export default function ProfileUploader(props: IProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    setImageUrl(props.fileUrl ?? null);
+  }, []);
 
   const onClickFindFile = () => {
     fileRef.current?.click();
@@ -32,11 +36,15 @@ export default function ProfileUploader(props: IProps) {
     props.setFile!(file);
   };
 
+  const isLocalURL = !imageUrl?.includes("file-storage");
+
   return (
     <>
       {imageUrl ? (
         <UploadImage
-          src={imageUrl}
+          src={
+            isLocalURL ? imageUrl : `https://storage.googleapis.com/${imageUrl}`
+          }
           width={props.width ?? 78}
           height={props.height ?? 78}
           onClick={onClickFindFile}

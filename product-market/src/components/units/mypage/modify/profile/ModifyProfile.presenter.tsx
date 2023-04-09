@@ -1,9 +1,13 @@
 import styled from "@emotion/styled";
 import { Button, Input } from "antd";
+import { ChangeEvent, MouseEvent } from "react";
 import ProfileUploader from "src/commons/ui/uploads";
 import { useAuth } from "src/components/hooks/useAuth";
 
 interface IProps {
+  setFile?: React.Dispatch<React.SetStateAction<File | undefined>>;
+  onChangeName: (event: ChangeEvent<HTMLInputElement>) => void;
+  onClickModifyUser: (event: MouseEvent) => void;
   onClickChangePassword: (event: MouseEvent) => void;
 }
 
@@ -14,10 +18,18 @@ export default function ModifyProfileUI(props: IProps) {
     <Wrapper>
       <TitleWrapper>
         <Title>회원 정보 수정</Title>
+        <ModifyUserInfoButton onClick={props.onClickModifyUser}>
+          저장
+        </ModifyUserInfoButton>
       </TitleWrapper>
       <ItemWrapper>
         <ProfileWrapper>
-          <ProfileUploader width={150} height={150} />
+          <ProfileUploader
+            width={150}
+            height={150}
+            setFile={props.setFile}
+            fileUrl={userInfo?.picture}
+          />
         </ProfileWrapper>
         <InputWrapper>
           <Label>이메일</Label>
@@ -25,7 +37,10 @@ export default function ModifyProfileUI(props: IProps) {
         </InputWrapper>
         <InputWrapper>
           <Label>이름</Label>
-          <InputField value={userInfo?.name} />
+          <InputField
+            defaultValue={userInfo?.name}
+            onChange={props.onChangeName}
+          />
         </InputWrapper>
         <InputWrapper>
           <SettingItemWrapper>
@@ -58,7 +73,8 @@ export const ItemWrapper = styled.div`
 export const TitleWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 50px;
   margin-bottom: 54px;
 `;
@@ -66,6 +82,14 @@ export const TitleWrapper = styled.div`
 export const Title = styled.h2`
   font-weight: 800;
   font-size: 24px;
+`;
+
+export const ModifyUserInfoButton = styled(Button)`
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  background-color: ${(props) => props.theme.color.primary};
+  height: 38px;
 `;
 
 export const ProfileWrapper = styled.div`

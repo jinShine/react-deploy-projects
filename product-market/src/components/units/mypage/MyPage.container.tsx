@@ -4,5 +4,12 @@ import MyPageUI from "./MyPage.presenter";
 export default function MyPage() {
   const { push } = useMoveToPage();
 
-  return <MyPageUI onClickSetting={() => push("/mypage/setting")} />;
+  const onClickModifyProfile = () => push("/mypage/modify/profile");
+
+  return (
+    <MyPageUI
+      onClickModifyProfile={onClickModifyProfile}
+      onClickSetting={() => push("/mypage/setting")}
+    />
+  );
 }

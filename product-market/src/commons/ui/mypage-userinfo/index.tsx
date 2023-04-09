@@ -5,6 +5,7 @@ import { MouseEvent } from "react";
 import { useAuth } from "src/components/hooks/useAuth";
 
 interface IProps {
+  onClickModifyProfile: (event: MouseEvent) => void;
   onClickSetting: (event: MouseEvent) => void;
 }
 
@@ -13,9 +14,11 @@ export default function MyPageUserInfo(props: IProps) {
 
   return (
     <Wrapper>
-      <UserInfoWrapper>
+      <UserInfoWrapper onClick={props.onClickModifyProfile}>
         {userInfo?.picture ? (
-          <UserProfile src={userInfo.picture} />
+          <UserProfile
+            src={`https://storage.googleapis.com/${userInfo?.picture}`}
+          />
         ) : (
           <UserProfile src="/images/ic-profile.svg" />
         )}
