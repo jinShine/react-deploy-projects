@@ -3,7 +3,9 @@ import { Button, Input } from "antd";
 import ProfileUploader from "src/commons/ui/uploads";
 import { useAuth } from "src/components/hooks/useAuth";
 
-interface IProps {}
+interface IProps {
+  onClickChangePassword: (event: MouseEvent) => void;
+}
 
 export default function ModifyProfileUI(props: IProps) {
   const { userInfo } = useAuth();
@@ -15,7 +17,7 @@ export default function ModifyProfileUI(props: IProps) {
       </TitleWrapper>
       <ItemWrapper>
         <ProfileWrapper>
-          <ProfileUploader width={130} height={130} />
+          <ProfileUploader width={150} height={150} />
         </ProfileWrapper>
         <InputWrapper>
           <Label>이메일</Label>
@@ -27,7 +29,9 @@ export default function ModifyProfileUI(props: IProps) {
         </InputWrapper>
         <InputWrapper>
           <SettingItemWrapper>
-            <ChangePassword type="text">비밀번호 변경</ChangePassword>
+            <ChangePassword type="text" onClick={props.onClickChangePassword}>
+              비밀번호 변경
+            </ChangePassword>
           </SettingItemWrapper>
         </InputWrapper>
       </ItemWrapper>
@@ -78,20 +82,19 @@ export const InputWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
-  margin-top: 30px;
+  margin-top: 10px;
 `;
 
 export const Label = styled.p`
-  font-size: 18px;
-  font-weight: 400;
-  color: ${(props) => props.theme.text.primary};
-  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: ${(props) => props.theme.text.secondary};
+  padding: 10px 2px;
 `;
 
 export const InputField = styled(Input)`
   height: 46px;
   margin-top: 6px;
-  font-size: 18px;
 `;
 
 export const SettingItemWrapper = styled.div`
@@ -102,7 +105,7 @@ export const SettingItemWrapper = styled.div`
 `;
 
 export const ChangePassword = styled(Button)`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: ${(props) => props.theme.text.tertiary};
   margin-top: 30px;

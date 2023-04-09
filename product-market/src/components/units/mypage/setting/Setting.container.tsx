@@ -11,7 +11,7 @@ export default function Setting() {
   const onClickItem = (event: SyntheticEvent) => {
     switch (Number(event.currentTarget.id)) {
       case SettingData.modifyUserInfo:
-        push("/mypage/modify");
+        push("/mypage/modify/profile");
         break;
       case SettingData.logout:
         logout();
