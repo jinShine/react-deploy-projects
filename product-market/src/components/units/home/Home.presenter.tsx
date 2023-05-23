@@ -1,19 +1,19 @@
-import { globalTheme } from "@/styles/theme/globalTheme";
-import { EditOutlined } from "@ant-design/icons";
-import { ConfigProvider, FloatButton, TabsProps } from "antd";
-import { Tabs } from "antd";
-import Head from "next/head";
-import { ItemCard } from "src/commons/ui/item-card";
-import { HomeItemList } from "./Home.infiniteUI";
-import * as S from "./Home.styles";
-import { IHomeUIProps } from "./Home.types";
-import SearchBar from "src/commons/ui/searchBar";
+import { globalTheme } from '@/styles/theme/globalTheme'
+import { EditOutlined } from '@ant-design/icons'
+import { ConfigProvider, FloatButton, TabsProps } from 'antd'
+import { Tabs } from 'antd'
+import Head from 'next/head'
+import { ItemCard } from 'src/commons/ui/item-card'
+import { HomeItemList } from './Home.infiniteUI'
+import * as S from './Home.styles'
+import { IHomeUIProps } from './Home.types'
+import SearchBar from 'src/commons/ui/searchBar'
 
 export default function HomeUI(props: IHomeUIProps) {
-  const items: TabsProps["items"] = [
+  const items: TabsProps['items'] = [
     {
-      key: "1",
-      label: "판매중인상품",
+      key: '1',
+      label: '판매중인상품',
       children: (
         <HomeItemList
           usedItemsData={props.usedItemsData}
@@ -26,8 +26,8 @@ export default function HomeUI(props: IHomeUIProps) {
       ),
     },
     {
-      key: "2",
-      label: "판매된상품",
+      key: '2',
+      label: '판매된상품',
       children: (
         <HomeItemList
           usedItemsData={props.usedItemsData}
@@ -39,7 +39,7 @@ export default function HomeUI(props: IHomeUIProps) {
         />
       ),
     },
-  ];
+  ]
 
   return (
     <>
@@ -51,8 +51,7 @@ export default function HomeUI(props: IHomeUIProps) {
       </Head>
       <S.Wrapper>
         <ConfigProvider
-          theme={{ token: { colorPrimary: `${globalTheme.color.primary}` } }}
-        >
+          theme={{ token: { colorPrimary: `${globalTheme.color.primary}` } }}>
           <FloatButton
             type="primary"
             icon={<EditOutlined />}
@@ -76,7 +75,7 @@ export default function HomeUI(props: IHomeUIProps) {
           <S.BestItemTitle>베스트 상품</S.BestItemTitle>
           <S.ItemsWrapper>
             {props.itemsOfBestDatas?.fetchUseditemsOfTheBest &&
-              props.itemsOfBestDatas?.fetchUseditemsOfTheBest.map((el) => (
+              props.itemsOfBestDatas?.fetchUseditemsOfTheBest.map(el => (
                 <ItemCard
                   id={el._id}
                   key={el._id}
@@ -96,12 +95,12 @@ export default function HomeUI(props: IHomeUIProps) {
           <Tabs
             defaultActiveKey="1"
             items={items}
-            type={"card"}
+            type={'card'}
             tabBarStyle={{ color: globalTheme.text.tertiary }}
             onChange={props.onChangeTab}
           />
         </S.ProductWrapper>
       </S.Wrapper>
     </>
-  );
+  )
 }

@@ -6,14 +6,15 @@ module.exports = {
   extends: [
     "plugin:react/recommended",
     "plugin:@next/next/recommended",
-    // "standard-with-typescript",
     "prettier",
   ],
   overrides: [],
+  parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: "**/tsconfig.json",
+    project: "./tsconfig.json",
     ecmaVersion: "latest",
     sourceType: "module",
+    tsconfigRootDir: __dirname,
   },
   plugins: ["react"],
   ignorePatterns: ["src/commons/types/generated/types.ts"],
@@ -25,5 +26,10 @@ module.exports = {
     "@typescript-eslint/triple-slash-reference": "off",
     "react/display-name": "off",
     "@typescript-eslint/naming-convention": "off",
+    "no-new-object": "error",
+    "no-var": "error",
+    "no-array-constructor": "error",
+    "comma-spacing": ["error", { before: false, after: true }],
+    "key-spacing": ["error", { beforeColon: false }],
   },
 };

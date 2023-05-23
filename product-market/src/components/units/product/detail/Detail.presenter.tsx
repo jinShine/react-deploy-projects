@@ -1,31 +1,30 @@
-import { globalTheme } from "@/styles/theme/globalTheme";
-import { EditOutlined } from "@ant-design/icons";
-import { ConfigProvider, Divider, FloatButton, Tag, Tooltip } from "antd";
-import DOMPurify from "dompurify";
-import { IQuery } from "src/commons/types/graphql/types";
-import { EmptyImage } from "src/commons/ui/empty-image";
-import { KakaoMap } from "src/commons/ui/kakao-map";
-import { Tags } from "src/commons/ui/tag-list";
-import { getDate } from "src/commons/utils/date";
-import { useAuth } from "src/components/hooks/useAuth";
-import * as S from "./Detail.styles";
+import { globalTheme } from '@/styles/theme/globalTheme'
+import { EditOutlined } from '@ant-design/icons'
+import { ConfigProvider, Divider, FloatButton, Tag, Tooltip } from 'antd'
+import DOMPurify from 'dompurify'
+import { IQuery } from 'src/commons/types/graphql/types'
+import { EmptyImage } from 'src/commons/ui/empty-image'
+import { KakaoMap } from 'src/commons/ui/kakao-map'
+import { Tags } from 'src/commons/ui/tag-list'
+import { getDate } from 'src/commons/utils/date'
+import { useAuth } from 'src/components/hooks/useAuth'
+import * as S from './Detail.styles'
 
 interface IProps {
-  useditem: Pick<IQuery, "fetchUseditem"> | undefined;
-  onClickPick: () => void;
-  onClickProductEdit: () => void;
+  useditem: Pick<IQuery, 'fetchUseditem'> | undefined
+  onClickPick: () => void
+  onClickProductEdit: () => void
 }
 
 export default function ProductDetailUI(props: IProps) {
-  const { userInfo } = useAuth();
-  const useditem = props.useditem?.fetchUseditem;
+  const { userInfo } = useAuth()
+  const useditem = props.useditem?.fetchUseditem
 
   return (
     <S.Wrapper>
       {userInfo?.email === useditem?.seller?.email && (
         <ConfigProvider
-          theme={{ token: { colorPrimary: `${globalTheme.text.primary}` } }}
-        >
+          theme={{ token: { colorPrimary: `${globalTheme.text.primary}` } }}>
           <FloatButton
             type="primary"
             icon={<EditOutlined />}
@@ -36,7 +35,7 @@ export default function ProductDetailUI(props: IProps) {
         </ConfigProvider>
       )}
       <S.CarouselWrapper autoplay>
-        {useditem?.images && useditem?.images?.every((img) => img !== "") ? (
+        {useditem?.images && useditem?.images?.every(img => img !== '') ? (
           useditem.images?.map((url, index) => (
             <div key={index}>
               {url ? (
@@ -58,20 +57,19 @@ export default function ProductDetailUI(props: IProps) {
             src={
               useditem?.seller?.picture
                 ? `${process.env.NEXT_PUBLIC_STORAGE_URI}/${useditem?.seller?.picture}`
-                : "/images/ic-profile.svg"
+                : '/images/ic-profile.svg'
             }
           />
-          <S.SellerName>{useditem?.seller?.name ?? "판매자"}</S.SellerName>
+          <S.SellerName>{useditem?.seller?.name ?? '판매자'}</S.SellerName>
         </S.SellerWrapper>
         {useditem?.useditemAddress?.address && (
           <Tooltip
             placement="leftTop"
             title={`${useditem.useditemAddress.address}\n${useditem.useditemAddress.addressDetail}`}
             overlayStyle={{
-              fontSize: "13px",
-              whiteSpace: "pre-wrap",
-            }}
-          >
+              fontSize: '13px',
+              whiteSpace: 'pre-wrap',
+            }}>
             <Tag color="default">위치</Tag>
           </Tooltip>
         )}
@@ -81,10 +79,7 @@ export default function ProductDetailUI(props: IProps) {
         <S.TitleWrapper>
           <S.Title>{useditem?.name}</S.Title>
           <S.PickWrapper>
-            <S.PickImage
-              src="/images/ic-heart.svg"
-              onClick={props.onClickPick}
-            />
+            <S.PickImage src="/images/ic-heart.svg" onClick={props.onClickPick} />
             <S.PickCount>{useditem?.pickedCount ?? 0}</S.PickCount>
           </S.PickWrapper>
         </S.TitleWrapper>
@@ -93,10 +88,10 @@ export default function ProductDetailUI(props: IProps) {
           <Tags data={useditem?.tags} />
         </S.TagWrapper>
         <S.Price>{`${useditem?.price?.toLocaleString()}원`}</S.Price>
-        {typeof window !== "undefined" && (
+        {typeof window !== 'undefined' && (
           <S.Contents
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(useditem?.contents ?? ""),
+              __html: DOMPurify.sanitize(useditem?.contents ?? ''),
             }}
           />
         )}
@@ -106,15 +101,15 @@ export default function ProductDetailUI(props: IProps) {
       <KakaoMap
         address={useditem?.useditemAddress?.address}
         style={{
-          width: "700px",
-          height: "400px",
+          width: '700px',
+          height: '400px',
           borderRadius: 10,
         }}
       />
-      <S.LocationAddress>{`${useditem?.useditemAddress?.address ?? ""} ${
-        useditem?.useditemAddress?.addressDetail ?? ""
+      <S.LocationAddress>{`${useditem?.useditemAddress?.address ?? ''} ${
+        useditem?.useditemAddress?.addressDetail ?? ''
       }`}</S.LocationAddress>
       <Divider />
     </S.Wrapper>
-  );
+  )
 }

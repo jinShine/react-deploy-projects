@@ -1,36 +1,33 @@
-import { useMutation, useQuery } from "@apollo/client";
-import { Modal } from "antd";
-import { MouseEvent } from "react";
+import { useMutation, useQuery } from '@apollo/client'
+import { Modal } from 'antd'
+import { MouseEvent } from 'react'
 import {
   IMutation,
   IMutationDeleteUseditemQuestionArgs,
   IQuery,
   IQueryFetchUseditemQuestionsArgs,
-} from "src/commons/types/graphql/types";
-import { useMoveToPage } from "src/components/hooks/useMoveToPage";
-import CommentListUI from "./List.presenter";
-import {
-  DELETE_USED_ITEM_QUESTIONS,
-  FETCH_USED_ITEMS_QUESTIONS,
-} from "./List.queries";
+} from 'src/commons/types/graphql/types'
+import { useMoveToPage } from 'src/components/hooks/useMoveToPage'
+import CommentListUI from './List.presenter'
+import { DELETE_USED_ITEM_QUESTIONS, FETCH_USED_ITEMS_QUESTIONS } from './List.queries'
 
 export default function CommentList() {
-  const { push, query } = useMoveToPage();
+  const { push, query } = useMoveToPage()
 
   const { data: commentDatas, fetchMore } = useQuery<
-    Pick<IQuery, "fetchUseditemQuestions">,
+    Pick<IQuery, 'fetchUseditemQuestions'>,
     IQueryFetchUseditemQuestionsArgs
   >(FETCH_USED_ITEMS_QUESTIONS, {
-    variables: { page: 0, useditemId: query.useditemId },
-  });
+    variables: { page: 0, useditemId: query.useditemId as string },
+  })
 
   const [deleteUseditemQuestions] = useMutation<
-    Pick<IMutation, "deleteUseditemQuestion">,
+    Pick<IMutation, 'deleteUseditemQuestion'>,
     IMutationDeleteUseditemQuestionArgs
-  >(DELETE_USED_ITEM_QUESTIONS);
+  >(DELETE_USED_ITEM_QUESTIONS)
 
   const onLoadMore = () => {
-    if (!commentDatas) return;
+    if (!commentDatas) return
 
     void fetchMore({
       variables: {
@@ -38,7 +35,7 @@ export default function CommentList() {
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult.fetchUseditemQuestions) {
-          return { fetchUseditemQuestions: [...prev.fetchUseditemQuestions] };
+          return { fetchUseditemQuestions: [...prev.fetchUseditemQuestions] }
         }
 
         return {
@@ -46,17 +43,17 @@ export default function CommentList() {
             ...prev.fetchUseditemQuestions,
             ...fetchMoreResult.fetchUseditemQuestions,
           ],
-        };
+        }
       },
-    });
-  };
+    })
+  }
 
   const onClickUpdate = () => {
-    console.log("Update");
-  };
+    console.log('Update')
+  }
 
   const onClickDelete = async (event: MouseEvent<HTMLDivElement>) => {
-    const useditemQuestionId = event.currentTarget.id;
+    const useditemQuestionId = event.currentTarget.id
 
     try {
       await deleteUseditemQuestions({
@@ -67,11 +64,11 @@ export default function CommentList() {
             variables: { page: 0, useditemId: query.useditemId },
           },
         ],
-      });
+      })
     } catch (error) {
-      Modal.error({ content: (error as Error).message });
+      Modal.error({ content: (error as Error).message })
     }
-  };
+  }
 
   return (
     <CommentListUI
@@ -80,5 +77,5 @@ export default function CommentList() {
       onClickUpdate={onClickUpdate}
       onClickDelete={onClickDelete}
     />
-  );
+  )
 }
