@@ -126,6 +126,7 @@ export const useAuth = () => {
   return {
     isLoggedIn,
     userInfo,
+    setUserInfo,
     join,
     emailLogin,
     logout,

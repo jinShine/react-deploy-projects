@@ -1,7 +1,6 @@
 import {
   DollarOutlined,
   ExportOutlined,
-  ShoppingCartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import styled from "@emotion/styled";
@@ -49,13 +48,19 @@ export default function GlobalNavigationBar() {
   return (
     <Wrapper>
       {toastHolder}
-      <LogoWrapper onClick={() => push("/")}>Logo</LogoWrapper>
+      <LogoWrapper onClick={() => push("/")}>MARKET</LogoWrapper>
       <Space>
         {isLoggedIn ? (
           <PopoverView content={content} trigger="click">
             <>
               <IconTitle title={userInfo ? `${userInfo.name}님` : "로그인"}>
-                <UserOutlined />
+                {userInfo?.picture ? (
+                  <ProfileImage
+                    src={`${process.env.NEXT_PUBLIC_STORAGE_URI}/${userInfo?.picture}`}
+                  />
+                ) : (
+                  <UserOutlined />
+                )}
               </IconTitle>
             </>
           </PopoverView>
@@ -64,9 +69,9 @@ export default function GlobalNavigationBar() {
             <UserOutlined />
           </IconTitle>
         )}
-        <IconTitle title="장바구니" count={0}>
+        {/* <IconTitle title="장바구니" count={0}>
           <ShoppingCartOutlined />
-        </IconTitle>
+        </IconTitle> */}
       </Space>
     </Wrapper>
   );
@@ -83,10 +88,25 @@ const Wrapper = styled.div`
   width: 100%;
   height: 74px;
   background-color: white;
-  padding: 0 24px;
 `;
 
-const LogoWrapper = styled.div``;
+const LogoWrapper = styled.div`
+  color: ${(props) => props.theme.text.primary};
+  font-size: 24px;
+  font-weight: 700;
+  font-style: italic;
+  cursor: pointer;
+`;
+
+const ProfileImage = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  object-fit: cover;
+  outline: none;
+  border: none;
+  overflow: hidden;
+`;
 
 const PopOverWrapper = styled.div`
   display: flex;

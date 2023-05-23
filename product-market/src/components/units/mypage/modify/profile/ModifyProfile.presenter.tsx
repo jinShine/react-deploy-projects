@@ -54,6 +54,9 @@ export default function ModifyProfileUI(props: IProps) {
   );
 }
 
+//////////////////////////////////////////////////
+// styled
+
 export const Wrapper = styled.div`
   width: 100%;
   display: flex;

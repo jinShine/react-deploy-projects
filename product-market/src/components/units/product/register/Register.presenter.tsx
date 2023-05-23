@@ -226,6 +226,7 @@ export default function ProductRegisterUI(props: IProps) {
           </S.InputWrapper>
           <S.SubmitWrapper>
             <S.SubmitButton
+              
               isActivedColor={
                 formState.isValid
                   ? globalTheme.color.primary

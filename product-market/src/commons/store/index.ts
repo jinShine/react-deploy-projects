@@ -2,7 +2,9 @@ import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 import { IUserInfo } from "../types/userInfo";
 
-const { persistAtom } = recoilPersist();
+const { persistAtom } = recoilPersist({
+  key: `privateMarketState`,
+});
 
 export const visitedPageState = atom({
   key: `visitedPageState`,

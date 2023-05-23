@@ -1,6 +1,12 @@
 import { useMutation } from "@apollo/client";
 import { Modal } from "antd";
-import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useRecoilState } from "recoil";
 import { useInfoState } from "src/commons/store";
 import {
@@ -14,13 +20,12 @@ import { useToast } from "src/components/hooks/useToast";
 import ModifyProfileUI from "./ModifyProfile.presenter";
 import { UPDATE_USER, UPLOAD_FILE } from "./ModifyProfile.queries";
 import { useAuth } from "src/components/hooks/useAuth";
+import { userInfo } from "os";
 
 export default function ModifyProfile() {
   const { push } = useMoveToPage();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, userInfo, setUserInfo } = useAuth();
   const [toast, toastHolder] = useToast();
-
-  const [userInfo, setUserInfo] = useRecoilState(useInfoState);
 
   const [file, setFile] = useState<File>();
   const [name, setName] = useState<string>();
@@ -51,6 +56,8 @@ export default function ModifyProfile() {
       if (file) {
         const uploadFileResult = await uploadFile({ variables: { file } });
         picture = uploadFileResult.data?.uploadFile.url;
+      } else {
+        picture = userInfo?.picture ?? "";
       }
 
       const updateUserResult = await updateUser({
@@ -72,6 +79,8 @@ export default function ModifyProfile() {
       setUserInfo(newUserInfo);
 
       toast.success("프로필 수정 완료");
+
+      push("/mypage", 1);
     } catch (error) {
       Modal.error({ content: (error as Error).message });
     }

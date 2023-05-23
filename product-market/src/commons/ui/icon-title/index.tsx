@@ -33,6 +33,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   margin: 0 10px;
+  cursor: pointer;
 `;
 
 const ImageWrapper = styled.div`
@@ -46,4 +47,5 @@ const ImageWrapper = styled.div`
 const Title = styled.span`
   padding-top: 6px;
   font-size: 12px;
+  font-weight: 700;
 `;

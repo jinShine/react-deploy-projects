@@ -13,7 +13,5 @@ export default function ProductEditPage() {
     }
   );
 
-  console.log("###############!!!!!!!!!!!!", useditemData);
-
   return <ProductRegister isEdit={true} useditemData={useditemData} />;
 }
