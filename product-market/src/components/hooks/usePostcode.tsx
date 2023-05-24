@@ -56,5 +56,6 @@ export const usePostcode = () => {
     showPostcode,
     hidePostcode,
     addressInfo,
+    setAddressInfo,
   }
 }

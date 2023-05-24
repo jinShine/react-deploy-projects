@@ -4,7 +4,14 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Space, Upload } from 'antd'
 import { UploadChangeParam } from 'antd/es/upload'
 import type { UploadFile } from 'antd/es/upload/interface'
-import { JSXElementConstructor, ReactElement, useEffect, useState } from 'react'
+import {
+  Dispatch,
+  JSXElementConstructor,
+  ReactElement,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import 'react-quill/dist/quill.snow.css'
 import { IQuery } from 'src/commons/types/graphql/types'
@@ -21,8 +28,10 @@ interface IProps {
   onClickUpdate: (data: IProductRegisterInput) => void
   onChangeAttachedImage: ((info: UploadChangeParam<UploadFile<any>>) => void) | undefined
   onPreviewAttachedImage: ((file: UploadFile<any>) => void) | undefined
+  onRemoveAttachedImage: ((file: UploadFile<any>) => void) | undefined
   onClickPostSearch: () => void
   addressInfo: AddressInfo
+  setAddressInfo: Dispatch<SetStateAction<AddressInfo>>
   toastHolder: ReactElement<any, string | JSXElementConstructor<any>>
 }
 
@@ -38,6 +47,8 @@ export default function ProductRegisterUI(props: IProps) {
   const [fileList, setFileList] = useState<UploadFile[]>(props.newFileList)
 
   useEffect(() => {
+    console.log('@djdjdjdjdjdjjdj??????????', useditemData)
+
     reset({
       productName: useditemData?.name ?? '',
       price: Number(useditemData?.price ?? 0),
@@ -47,6 +58,8 @@ export default function ProductRegisterUI(props: IProps) {
       addressDetail: useditemData?.useditemAddress?.addressDetail ?? '',
       tags: useditemData?.tags?.toString(),
     })
+
+    props.setAddressInfo(useditemData?.useditemAddress ?? {})
     setFileList(props.newFileList)
   }, [useditemData])
 
@@ -122,10 +135,10 @@ export default function ProductRegisterUI(props: IProps) {
             <Upload
               listType="picture-card"
               maxCount={3}
-              multiple
               style={{ color: `${globalTheme.color.primary}` }}
               onChange={props.onChangeAttachedImage}
               onPreview={props.onPreviewAttachedImage}
+              onRemove={props.onRemoveAttachedImage}
               defaultFileList={fileList}>
               <div>
                 <PlusOutlined />

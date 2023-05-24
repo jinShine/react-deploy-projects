@@ -15,6 +15,8 @@ import { useToast } from 'src/components/hooks/useToast'
 import ProductRegisterUI from './Register.presenter'
 import { CREATE_USED_ITEM, UPDATE_USED_ITEM, UPLOAD_FILE } from './Register.queries'
 import { IProductRegisterInput } from './Register.types'
+import { useRecoilValue } from 'recoil'
+import { coordinateState } from '@/src/commons/store'
 
 interface IProps {
   isEdit: boolean
@@ -23,7 +25,8 @@ interface IProps {
 
 export default function ProductRegister(props: IProps) {
   const [imageURLs, setImageURLs] = useState<string[]>([])
-  const { showPostcode, addressInfo } = usePostcode()
+  const coordinates = useRecoilValue(coordinateState)
+  const { showPostcode, addressInfo, setAddressInfo } = usePostcode()
   const [toast, toastHolder] = useToast()
   const { push, query } = useMoveToPage()
 
@@ -86,8 +89,8 @@ export default function ProductRegister(props: IProps) {
               zipcode: String(addressInfo.zonecode),
               address: addressInfo.address,
               addressDetail: data.addressDetail,
-              lat: 33.55635,
-              lng: 126.795841,
+              lat: coordinates.lat,
+              lng: coordinates.lng,
             },
             images: imageURLs,
           },
@@ -103,35 +106,39 @@ export default function ProductRegister(props: IProps) {
 
   const onClickUpdate = async (data: IProductRegisterInput) => {
     console.log(data)
-    console.log(addressInfo.zonecode)
-    console.log(addressInfo.address)
+    console.log(addressInfo)
     console.log(imageURLs)
+
+    if (imageURLs.length === 0) {
+      toast.error('이미지를 등록해주세요. (최소 1개)')
+      return
+    }
 
     const contents = data.contents === '<p><br></p>' ? '' : data.contents
 
     try {
-      // await updateUseditem({
-      //   variables: {
-      //     updateUseditemInput: {
-      //       name: data.productName,
-      //       remarks: data.remarks,
-      //       contents: contents,
-      //       price: data.price,
-      //       tags: data.tags.split(",").map((tag) => tag.trim()),
-      //       useditemAddress: {
-      //         zipcode: addressInfo.zonecode,
-      //         address: addressInfo.address,
-      //         addressDetail: data.addressDetail,
-      //         lat: 33.55635,
-      //         lng: 126.795841,
-      //       },
-      //       images: imageURLs,
-      //     },
-      //     useditemId: query.useditemId as string,
-      //   },
-      // });
-      // toast.success("상품 수정 성공🎉");
-      // void push("/", 1.5);
+      await updateUseditem({
+        variables: {
+          updateUseditemInput: {
+            name: data.productName,
+            remarks: data.remarks,
+            contents: contents,
+            price: data.price,
+            tags: data.tags.split(',').map(tag => tag.trim()),
+            useditemAddress: {
+              zipcode: String(addressInfo.zonecode),
+              address: addressInfo.address,
+              addressDetail: data.addressDetail,
+              lat: coordinates.lat,
+              lng: coordinates.lng,
+            },
+            images: imageURLs,
+          },
+          useditemId: query.useditemId as string,
+        },
+      })
+      toast.success('상품 수정 성공🎉')
+      void push('/', 1.5)
     } catch (error) {
       toast.error((error as Error).message)
     }
@@ -141,12 +148,17 @@ export default function ProductRegister(props: IProps) {
     fileList: newFileList,
   }) => {
     try {
-      const uploadFiles = newFileList.map(file =>
-        uploadFile({ variables: { file: file.originFileObj } }),
-      )
-      const result = await Promise.all(uploadFiles)
+      const uploadedFiles = newFileList
+        .filter(file => (file.size ?? 0) > 0)
+        .map(file => uploadFile({ variables: { file: file.originFileObj } }))
+
+      const result = await Promise.all(uploadedFiles)
+      const existingUrls = newFileList
+        .filter(file => file.status === 'done')
+        .map(file => file.url?.replace('https://storage.googleapis.com/', '') ?? '')
       const urls = result.map(res => res.data?.uploadFile.url ?? '')
-      setImageURLs(urls)
+
+      setImageURLs([...existingUrls, ...urls].filter(url => url.length > 0))
     } catch (error) {
       if (error instanceof Error) Modal.error({ content: error.message })
     }
@@ -167,6 +179,10 @@ export default function ProductRegister(props: IProps) {
     imgWindow?.document.write(image.outerHTML)
   }
 
+  const onRemoveAttachedImage = (file: UploadFile) => {
+    console.log('onRemoveAttachedImage', file)
+  }
+
   const onClickPostSearch = () => showPostcode()
 
   return (
@@ -178,8 +194,10 @@ export default function ProductRegister(props: IProps) {
       onClickUpdate={onClickUpdate}
       onChangeAttachedImage={onChangeAttachedImage}
       onPreviewAttachedImage={onPreviewAttachedImage}
+      onRemoveAttachedImage={onRemoveAttachedImage}
       onClickPostSearch={onClickPostSearch}
       addressInfo={addressInfo}
+      setAddressInfo={setAddressInfo}
       toastHolder={toastHolder}
     />
   )
