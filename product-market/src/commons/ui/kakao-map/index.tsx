@@ -1,4 +1,3 @@
-import Script from 'next/script'
 import { CSSProperties, useEffect, useState } from 'react'
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
@@ -38,10 +37,6 @@ export const KakaoMap = (props: IProps) => {
             lng: coords?.getLng() ?? 126.969652,
           }}></MapMarker>
       </Map>
-      <Script
-        src={`${process.env.NEXT_PUBLIC_KAKAO_MAP_URI}`}
-        strategy="beforeInteractive"
-      />
     </>
   )
 }

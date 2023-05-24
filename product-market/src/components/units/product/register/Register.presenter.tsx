@@ -28,6 +28,7 @@ interface IProps {
 
 export default function ProductRegisterUI(props: IProps) {
   const useditemData = props.useditemData?.fetchUseditem
+  const isShowMap = (props.addressInfo.address ?? '').length > 0
 
   const { handleSubmit, control, formState, reset } = useForm<IProductRegisterInput>({
     resolver: yupResolver(productRegisterSchema),
@@ -37,8 +38,6 @@ export default function ProductRegisterUI(props: IProps) {
   const [fileList, setFileList] = useState<UploadFile[]>(props.newFileList)
 
   useEffect(() => {
-    const ddd = useditemData?.useditemAddress?.address === null ? 'hidden' : ''
-
     reset({
       productName: useditemData?.name ?? '',
       price: Number(useditemData?.price ?? 0),
@@ -183,8 +182,7 @@ export default function ProductRegisterUI(props: IProps) {
                 height: '190px',
                 aspectRatio: '1.8',
                 marginLeft: '50px',
-                visibility:
-                  useditemData?.useditemAddress?.address === null ? 'hidden' : 'visible',
+                visibility: isShowMap ? 'visible' : 'hidden',
               }}
             />
           </S.ZipcodeWrapper>
