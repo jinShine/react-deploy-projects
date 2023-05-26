@@ -12,27 +12,37 @@ yarn dev
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 프로젝트
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- **기술**
+  - Typescript를 이용한 Next.js 프레임워크 사용
+  - Container-Presenter Pattern 적용
+  - Emotion, Antd 이용한 UI 개발
+  - Apollo를 이용한 GraphQL Network 사용
+  - Recoil을 이용한 전역 상태 관리
+- **설명**
+  - Auth
+    - 로그인, 회원가입, 로그아웃
+      - JWT를 이용한 AccessToken, RefreshToken 처리
+    - 유저정보, 유저정보수정
+  - Home
+    - 상품 리스트, 상품 검색
+    - react-infinite-scroller를 통해 무한 스크롤 적용
+  - 상품
+    - 상품 CRUD
+      - 상세 정보
+      - 등록시 Daum 우편 주소를 Geocoder를 이용해 KakaoMap 좌표 처리
+      - 웹 에디터(react-quill)
+        - dompurify를 통해 크로스 사이트 스크립팅(XSS) 공격 대응
+      - React-hook-form + yup을 이용한 input 및 에러 처리
+      - 좋아요, 댓글 기능
+        - OptimisticUI 처리
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+![Auth-Image-1](./public/readme/auth-1.png)
+![Auth-Image-2](./public/readme/auth-2.png)
+![Main-Image](./public/readme/main-1.png)
+![Product-Image-1](./public/readme/product-1.png)
+![Product-Image-2](./public/readme/product-2.png)
+![Mypage-Image-1](./public/readme/mypage-1.png)
+![Mypage-Image-2](./public/readme/mypage-2.png)
+![Mypage-Image-3](./public/readme/mypage-3.png)
