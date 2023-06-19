@@ -14,6 +14,8 @@ pnpm dev
 
 ## 프로젝트
 
+상품 관련 **Public GraphQL API**를 통한 개인 프로젝트 진행
+
 - **기술**
   - Typescript를 이용한 Next.js 프레임워크 사용
   - Container-Presenter Pattern 적용
