@@ -1,13 +1,12 @@
 import { globalTheme } from '@/styles/theme/globalTheme'
 import { EditOutlined } from '@ant-design/icons'
-import { ConfigProvider, FloatButton, TabsProps } from 'antd'
-import { Tabs } from 'antd'
+import { ConfigProvider, FloatButton, Tabs, TabsProps } from 'antd'
 import Head from 'next/head'
 import { ItemCard } from 'src/commons/ui/item-card'
+import SearchBar from 'src/commons/ui/searchBar'
 import { HomeItemList } from './Home.infiniteUI'
 import * as S from './Home.styles'
 import { IHomeUIProps } from './Home.types'
-import SearchBar from 'src/commons/ui/searchBar'
 
 export default function HomeUI(props: IHomeUIProps) {
   const items: TabsProps['items'] = [

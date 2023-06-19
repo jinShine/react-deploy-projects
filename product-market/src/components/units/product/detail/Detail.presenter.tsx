@@ -2,21 +2,15 @@ import { globalTheme } from '@/styles/theme/globalTheme'
 import { EditOutlined } from '@ant-design/icons'
 import { ConfigProvider, Divider, FloatButton, Tag, Tooltip } from 'antd'
 import DOMPurify from 'dompurify'
-import { IQuery } from 'src/commons/types/graphql/types'
 import { EmptyImage } from 'src/commons/ui/empty-image'
 import { KakaoMap } from 'src/commons/ui/kakao-map'
 import { Tags } from 'src/commons/ui/tag-list'
 import { getDate } from 'src/commons/utils/date'
 import { useAuth } from 'src/components/hooks/useAuth'
 import * as S from './Detail.styles'
+import { IProductDetailUIProps } from './Detail.types'
 
-interface IProps {
-  useditem: Pick<IQuery, 'fetchUseditem'> | undefined
-  onClickPick: () => void
-  onClickProductEdit: () => void
-}
-
-export default function ProductDetailUI(props: IProps) {
+export default function ProductDetailUI(props: IProductDetailUIProps) {
   const { userInfo } = useAuth()
   const useditem = props.useditem?.fetchUseditem
 

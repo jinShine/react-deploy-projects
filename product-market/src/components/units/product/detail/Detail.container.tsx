@@ -1,31 +1,32 @@
-import { useMutation, useQuery } from "@apollo/client";
-import { Modal } from "antd";
+import { useMutation, useQuery } from '@apollo/client'
+import { Modal } from 'antd'
 import {
   IMutation,
   IMutationToggleUseditemPickArgs,
   IQuery,
   IQueryFetchUseditemArgs,
-} from "src/commons/types/graphql/types";
-import { useMoveToPage } from "src/components/hooks/useMoveToPage";
-import ProductDetailUI from "./Detail.presenter";
-import { FETCH_USED_ITEM, TOGGLE_USED_ITEM_PICK } from "./Detail.queries";
+} from 'src/commons/types/graphql/types'
+import { useMoveToPage } from 'src/components/hooks/useMoveToPage'
+import ProductDetailUI from './Detail.presenter'
+import { FETCH_USED_ITEM, TOGGLE_USED_ITEM_PICK } from './Detail.queries'
+import { useCallback } from 'react'
 
 export default function ProductDetail() {
-  const { push, query } = useMoveToPage();
+  const { push, query } = useMoveToPage()
 
   const { data: useditem } = useQuery<
-    Pick<IQuery, "fetchUseditem">,
+    Pick<IQuery, 'fetchUseditem'>,
     IQueryFetchUseditemArgs
   >(FETCH_USED_ITEM, {
     variables: { useditemId: query.useditemId as string },
-  });
+  })
 
   const [toggleUseditemPick] = useMutation<
-    Pick<IMutation, "toggleUseditemPick">,
+    Pick<IMutation, 'toggleUseditemPick'>,
     IMutationToggleUseditemPickArgs
   >(TOGGLE_USED_ITEM_PICK, {
     variables: { useditemId: query.useditemId as string },
-  });
+  })
 
   const onClickPick = async () => {
     try {
@@ -36,15 +37,15 @@ export default function ProductDetail() {
             variables: { useditemId: query.useditemId as string },
           },
         ],
-      });
+      })
     } catch (error) {
-      Modal.error({ content: (error as Error).message });
+      Modal.error({ content: (error as Error).message })
     }
-  };
+  }
 
-  const onClickProductEdit = () => {
-    push(`/product/${query.useditemId}/edit`);
-  };
+  const onClickProductEdit = useCallback(() => {
+    push(`/product/${query.useditemId}/edit`)
+  }, [])
 
   return (
     <ProductDetailUI
@@ -52,5 +53,5 @@ export default function ProductDetail() {
       onClickPick={onClickPick}
       onClickProductEdit={onClickProductEdit}
     />
-  );
+  )
 }

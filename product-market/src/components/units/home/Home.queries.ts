@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const FETCH_USED_ITEMS_OF_BEST = gql`
   query {
@@ -12,7 +12,7 @@ export const FETCH_USED_ITEMS_OF_BEST = gql`
       pickedCount
     }
   }
-`;
+`
 
 export const FETCH_USED_ITEMS = gql`
   query fetchUseditems($isSoldout: Boolean, $search: String, $page: Int) {
@@ -41,4 +41,4 @@ export const FETCH_USED_ITEMS = gql`
       updatedAt
     }
   }
-`;
+`

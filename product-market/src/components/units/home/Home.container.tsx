@@ -1,80 +1,74 @@
-import { useQuery } from "@apollo/client";
-import { MouseEvent, useEffect, useState } from "react";
-import {
-  IQuery,
-  IQueryFetchUseditemsArgs,
-} from "src/commons/types/graphql/types";
-import { useAuth } from "src/components/hooks/useAuth";
-import { useMoveToPage } from "src/components/hooks/useMoveToPage";
-import HomeUI from "./Home.presenter";
-import { FETCH_USED_ITEMS, FETCH_USED_ITEMS_OF_BEST } from "./Home.queries";
+import { useQuery } from '@apollo/client'
+import { MouseEvent, useCallback, useEffect, useState } from 'react'
+import { IQuery, IQueryFetchUseditemsArgs } from 'src/commons/types/graphql/types'
+import { useAuth } from 'src/components/hooks/useAuth'
+import { useMoveToPage } from 'src/components/hooks/useMoveToPage'
+import HomeUI from './Home.presenter'
+import { FETCH_USED_ITEMS, FETCH_USED_ITEMS_OF_BEST } from './Home.queries'
 
 export default function Home() {
-  const { push } = useMoveToPage();
-  const { isLoggedIn, fetchUserInfo } = useAuth();
-  const [isSoldout, setIsSoldout] = useState(false);
-  const [keyword, setKeyword] = useState("");
+  const { push } = useMoveToPage()
+  const { isLoggedIn, fetchUserInfo } = useAuth()
+  const [isSoldout, setIsSoldout] = useState(false)
+  const [keyword, setKeyword] = useState('')
 
   useEffect(() => {
-    fetchUserInfo();
-  }, []);
+    fetchUserInfo()
+  }, [])
 
-  const { data: itemsOfBestData } = useQuery<
-    Pick<IQuery, "fetchUseditemsOfTheBest">
-  >(FETCH_USED_ITEMS_OF_BEST);
+  const { data: itemsOfBestData } = useQuery<Pick<IQuery, 'fetchUseditemsOfTheBest'>>(
+    FETCH_USED_ITEMS_OF_BEST,
+  )
 
   const {
     data: usedItemsData,
     fetchMore,
     refetch,
-  } = useQuery<Pick<IQuery, "fetchUseditems">, IQueryFetchUseditemsArgs>(
-    FETCH_USED_ITEMS
-  );
+  } = useQuery<Pick<IQuery, 'fetchUseditems'>, IQueryFetchUseditemsArgs>(FETCH_USED_ITEMS)
 
   const onLoadMore = async (page: number) => {
-    if (!usedItemsData) return;
+    if (!usedItemsData) return
 
-    const nextPage =
-      Math.ceil((usedItemsData.fetchUseditems.length ?? 10) / 10) + 1;
+    const nextPage = Math.ceil((usedItemsData.fetchUseditems.length ?? 10) / 10) + 1
 
     await fetchMore({
       variables: { isSoldout, search: keyword, page: nextPage },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (fetchMoreResult.fetchUseditems === undefined) {
-          return { fetchUseditems: [...prev.fetchUseditems] };
+          return { fetchUseditems: [...prev.fetchUseditems] }
         }
 
         return {
-          fetchUseditems: [
-            ...prev.fetchUseditems,
-            ...fetchMoreResult.fetchUseditems,
-          ],
-        };
+          fetchUseditems: [...prev.fetchUseditems, ...fetchMoreResult.fetchUseditems],
+        }
       },
-    });
-  };
+    })
+  }
 
   const onChangeTab = (key: string) => {
-    setIsSoldout(key !== "1");
-    refetch({ isSoldout: key !== "1", search: keyword, page: 0 });
-  };
+    setIsSoldout(key !== '1')
+    refetch({ isSoldout: key !== '1', search: keyword, page: 0 })
+  }
 
-  const onClickProductRegister = () => {
+  const onClickProductRegister = useCallback(() => {
     if (isLoggedIn) {
-      push("/product/register");
+      push('/product/register')
     } else {
-      push("/login/email");
+      push('/login/email')
     }
-  };
+  }, [])
 
   const onClickItem = (event: MouseEvent<HTMLDivElement>) => {
-    push(`/product/${event.currentTarget.id}`);
-  };
+    push(`/product/${event.currentTarget.id}`)
+  }
 
-  const onChangeSearchbar = (value: string) => {
-    setKeyword(value);
-    refetch({ isSoldout: isSoldout, search: value, page: 0 });
-  };
+  const onChangeSearchbar = useCallback(
+    (value: string) => {
+      setKeyword(value)
+      refetch({ isSoldout: isSoldout, search: value, page: 0 })
+    },
+    [isSoldout],
+  )
 
   return (
     <HomeUI
@@ -88,5 +82,5 @@ export default function Home() {
       onClickItem={onClickItem}
       onChangeSearchbar={onChangeSearchbar}
     />
-  );
+  )
 }
