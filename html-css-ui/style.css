@@ -1,7 +1,0 @@
-/* .outer li {
-  color: orange;
-} */
-
-.outer > li:nth-child(4) {
-  color: blue;
-}
