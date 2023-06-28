@@ -181,3 +181,66 @@ header {
 #active-category-button .category-img-inactive {
   display: none;
 }
+
+/* items */
+
+main {
+  display: flex;
+  justify-content: center;
+  padding: 24px 80px;
+}
+
+.place-items-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 310px);
+  justify-content: center;
+  align-items: center;
+  gap: 40px 24px;
+}
+
+.place-image-wrapper {
+  position: relative;
+  width: 310px;
+  height: 290px;
+  border-radius: 23px;
+  overflow: hidden;
+}
+
+.place-image {
+  width: 310px;
+  height: 290px;
+  object-fit: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.heart-icon {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 16px;
+  right: 16px;
+  cursor: pointer;
+}
+
+.description-section {
+  margin-top: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 15px;
+  color: rgb(34, 34, 34);
+}
+
+.description-section_title {
+  font-weight: 600;
+}
+
+.description-section_sub {
+  color: #717171;
+}
+
+.heart-icon:active {
+  transform: scale(0.65);
+  transition: transform 0.25s ease;
+}
